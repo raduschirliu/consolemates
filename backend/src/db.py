@@ -59,7 +59,7 @@ def create_letter_table():
             reply_id varchar(255) NOT NULL,
             viewed BOOLEAN NOT NULL,
             sentiment varchar(255) NOT NULL,
-            content varchar(max) NOT NULL
+            content varchar(10485760) NOT NULL
         );
     """
 
