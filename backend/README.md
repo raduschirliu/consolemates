@@ -6,7 +6,7 @@ Run the following:
 
 ```shell
 python -m virtualenv .venv
-source ./venv/Scripts/activate
+source .venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
