@@ -69,6 +69,47 @@ def create_letter_table():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
 
+
+def create_user_topic_table():
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+
+    sql = """
+        CREATE TABLE IF NOT EXISTS user_topic (
+            user_id varchar(255) NOT NULL,
+            topic_id varchar(255) NOT NULL,
+            PRIMARY KEY(user_id, topic_id)
+        );
+    """
+
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+
+
+def create_letter_topic_table():
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+
+    sql = """
+        CREATE TABLE IF NOT EXISTS letter_topic (
+           letter_id varchar(255) NOT NULL,
+           topic_id varchar(255) NOT NULL,
+           PRIMARY KEY (letter_id, topic_id)
+        );
+    """
+
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+
 ## API for letter
 
 ## API for topic

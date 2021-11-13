@@ -12,7 +12,11 @@ from src import util
 util.example()
 
 from src import db
-
+db.create_letter_table()
+db.create_user_table()
+db.create_topic_table()
+db.create_letter_topic_table()
+db.create_user_topic_table()
 # Setup Flask and variables
 port = int(os.getenv('PORT', 8000))
 app = Flask(__name__)
@@ -61,7 +65,7 @@ def get_letter(letter_id):
 
 @app.route('/letter', methods=['GET'])
 @cross_origin()
-def get_letter():
+def get_fresh_letters():
     # auth
     jwt = auth.verify_jwt()
     if jwt == False:
