@@ -185,6 +185,8 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
         return "Failed to post letter."
 
 ## API for topic
+
+# posts a user topic into the user_topic table
 def post_user_topic(user_id, topic_id):
     
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -197,7 +199,7 @@ def post_user_topic(user_id, topic_id):
     conn.close()
     return
 
-# returns an array of topic ids
+# returns an array of topics for a user
 def get_user_topics(user_id):
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
