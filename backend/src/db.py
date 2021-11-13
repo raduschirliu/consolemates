@@ -117,14 +117,14 @@ def create_letter_topic_table():
         print(error)
 
 ## API for letter
-def get_fresh_letters():
+def get_fresh_letters(user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
-    # returns the letter with a id matching letter_id
-    sql = "SELECT * FROM letter WHERE id = %s"
+    # returns all letters for which the recipient_id matches the user_id and viewed is false
+    sql = "SELECT * FROM letter WHERE recipient_id = %s AND viewed = %s"
 
     try:
-        cursor.execute(sql, (letter_id,))
+        cursor.execute(sql, (user_id, False))
         letters = cursor.fetchall()
         conn.commit()
         conn.close()
@@ -183,6 +183,22 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         return "Failed to post letter."
+
+def put_letter_viewed(letter_id):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+    # sets the viewed column to true for the letter with a matching letter_id
+    sql = "UPDATE letter SET viewed = true WHERE id = %s"
+
+    try:
+        cursor.execute(sql, (letter_id,))
+        # commit the changes
+        conn.commit()
+        conn.close()
+        return letter_id
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return letter_id
 
 ## API for topic
 
