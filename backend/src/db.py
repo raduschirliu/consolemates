@@ -58,7 +58,8 @@ def create_letter_table():
             recipient_id varchar(255) NOT NULL,
             reply_id varchar(255) NOT NULL,
             viewed BOOLEAN NOT NULL,
-            sentiment varchar(255) NOT NULL
+            sentiment varchar(255) NOT NULL,
+            content varchar(max) NOT NULL
         );
     """
 
