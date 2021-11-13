@@ -197,7 +197,7 @@ def post_user_topic(user_id, topic_id):
     cursor.execute(sql, (user_id, topic_id))
     conn.commit()
     conn.close()
-    return
+    return topic_id
 
 # returns an array of topics for a user
 def get_user_topics(user_id):
