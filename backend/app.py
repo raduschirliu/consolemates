@@ -75,6 +75,11 @@ def get_fresh_letters():
     user_id = jwt['sub']
     return db.get_fresh_letters(user_id)
 
+@app.route('/letter/{letter_id}', methods=['PUT'])
+@cross_origin()
+def put_letter_viewed(letter_id):
+    return db.put_letter_viewed(letter_id)
+
 # Topic
 @app.route('/topic', methods=['GET'])
 @cross_origin()

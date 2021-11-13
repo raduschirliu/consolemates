@@ -202,6 +202,50 @@ def put_letter_viewed(letter_id):
 
 ## API for topic
 
+# posts a user topic into the user_topic table
+def post_user_topic(user_id, topic_id):
+    
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+
+    # returns topic id that has this user_id in their preferred topics
+    sql = "INSERT INTO user_topic (user_id, topic_id) VALUES (%s, %s)"
+    cursor.execute(sql, (user_id, topic_id))
+    conn.commit()
+    conn.close()
+    return topic_id
+
+# returns an array of topics for a user
+def get_user_topics(user_id):
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+
+    # returns topic id that has this user_id in their preferred topics
+    sql = "SELECT * FROM user_topic WHERE user_id = %s"
+    cursor.execute(sql, (user_id,))
+    topic = cursor.fetchall()
+    conn.close()
+    if topic.isEmpty():
+        return None
+    return topic
+
+# returns an array of topics containing topic_id and name
+def get_topics():
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+
+    # returns topic id that has this user_id in their preferred topics
+    sql = "SELECT * FROM topic"
+    cursor.execute(sql)
+    topic = cursor.fetchall()
+    conn.close()
+    if topic.isEmpty():
+        return None
+    return topic
+
+
 ## API for user
 def get_recipient(topic_id, user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
