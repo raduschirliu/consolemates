@@ -112,6 +112,48 @@ def create_letter_topic_table():
         print(error)
 
 ## API for letter
+def post_letter():
+    pass
+
+def get_fresh_letters():
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+    # returns the letter with a id matching letter_id
+    sql = "SELECT * FROM letter WHERE id = %s"
+
+    try:
+        cursor.execute(sql, (letter_id,))
+        letter = cursor.fetchall()
+        conn.commit()
+        conn.close()
+
+        if letter.isEmpty():
+            return None
+        return letter
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return None
+
+
+def get_letter(letter_id):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+    # returns the letter with a id matching letter_id
+    sql = "SELECT * FROM letter WHERE id = %s"
+
+    try:
+        cursor.execute(sql, (letter_id,))
+        letter = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        if letter.isEmpty():
+            return None
+        return letter
+        
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return None
 
 ## API for topic
 
@@ -120,20 +162,34 @@ def get_recipient(topic_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     # returns user id that has this topic_id in their preferred topics
-    sql = "SELECT * FROM UserTopic WHERE topic_id = %s"
-    cursor.execute(sql, (topic_id,))
-    user_ids = cursor.fetchall()
-    if user_ids.isEmpty():
+    sql = "SELECT * FROM user_topic WHERE topic_id = %s"
+
+    try:
+        cursor.execute(sql, (topic_id,))
+        user_ids = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        if user_ids.isEmpty():
+            return None
+        return user_ids[0]
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
         return None
-    return user_ids[0]
 
 def get_random_recipient():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     # returns user id that has this topic_id in their preferred topics
-    sql = "SELECT id FROM Users"
-    cursor.execute(sql)
-    user_ids = cursor.fetchall()
-    return random.choice(user_ids)
+    sql = "SELECT id FROM users"
 
+    try:
+        cursor.execute(sql)
+        user_ids = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        return random.choice(user_ids)
 
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return None
