@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import random
 
 ## global variable of database url
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -73,7 +74,24 @@ def create_letter_table():
 ## API for topic
 
 ## API for user
+def get_recipient(topic_id):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+    # returns user id that has this topic_id in their preferred topics
+    sql = "SELECT * FROM UserTopic WHERE topic_id = %s"
+    cursor.execute(sql, (topic_id,))
+    user_ids = cursor.fetchall()
+    if user_ids.isEmpty():
+        return None
+    return user_ids[0]
 
-
+def get_random_recipient():
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+    # returns user id that has this topic_id in their preferred topics
+    sql = "SELECT id FROM Users"
+    cursor.execute(sql)
+    user_ids = cursor.fetchall()
+    return random.choice(user_ids)
 
 
