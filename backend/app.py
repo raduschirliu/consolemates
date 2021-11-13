@@ -51,7 +51,7 @@ def post_letter():
         recipient_id = db.get_random_recipient(user_id)
     emotions = te.get_emotion(letter['content'])
     sentiment = max(emotions, key=emotions.get)
-    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], letter['viewed'], sentiment, letter['content'])
+    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], False, sentiment, letter['content'])
     return letter_id
 
 @app.route('/letter/{letter_id}', methods=['GET'])
@@ -74,6 +74,11 @@ def get_fresh_letters():
     # get all fresh letters for a user
     user_id = jwt['sub']
     return db.get_fresh_letters(user_id)
+
+@app.route('/letter/{letter_id}', methods=['PUT'])
+@cross_origin()
+def put_letter_viewed(letter_id):
+    return db.put_letter_viewed(letter_id)
 
 # Topic
 @app.route('/topic', methods=['GET'])
