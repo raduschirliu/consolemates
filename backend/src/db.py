@@ -33,8 +33,6 @@ def create_user_table():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
 
-
-
 def create_topic_table():
     
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -79,7 +77,6 @@ def create_letter_table():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
 
-
 def create_user_topic_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
@@ -98,7 +95,6 @@ def create_user_topic_table():
         conn.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-
 
 def create_letter_topic_table():
 
@@ -129,13 +125,13 @@ def get_fresh_letters():
 
     try:
         cursor.execute(sql, (letter_id,))
-        letter = cursor.fetchall()
+        letters = cursor.fetchall()
         conn.commit()
         conn.close()
 
-        if letter.isEmpty():
+        if letters.isEmpty():
             return None
-        return letter
+        return letters
     
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -165,9 +161,8 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     id = str(uuid.uuid4())
-    try:
-        cursor.execute("""
-        INSERT INTO letter (
+    sql = """
+    INSERT INTO letter (
         id,
         author_id,
         recipient_id,
@@ -175,10 +170,15 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
         viewed,
         sentiment,
         content
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s)""", (id, recipient_id, reply_id, sentiment, content))
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
+
+    try:
+        cursor.execute(sql, (id, recipient_id, reply_id, sentiment, content))
         
         # commit the changes
         conn.commit()
+        conn.close()
         return id
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
