@@ -1,6 +1,7 @@
 import os
 import psycopg2
 import random
+import uuid
 
 ## global variable of database url
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -112,7 +113,28 @@ def create_letter_topic_table():
         print(error)
 
 ## API for letter
-#def post_letter(author_id, recipient_id, reply_id, viewed, sentiment):
+def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+    id = str(uuid.uuid4())
+    try:
+        cursor.execute("""
+        INSERT INTO letter (
+        id,
+        author_id,
+        recipient_id,
+        reply_id,
+        viewed,
+        sentiment,
+        content
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s)""", (id, recipient_id, reply_id, sentiment, content))
+        
+        # commit the changes
+        conn.commit()
+        return id
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return "Failed to post letter."
 
 ## API for topic
 
