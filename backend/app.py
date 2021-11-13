@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests
 from src import auth
+from flask_sqlalchemy import SQLAlchemy
 
 # Load environment variables
 load_dotenv()
@@ -19,6 +20,8 @@ app = Flask(__name__)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
+
+app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
 
 # Routes
 @app.route('/')
