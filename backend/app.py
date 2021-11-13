@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests
 from src import auth
+import text2emotion as te
 
 # Load environment variables
 load_dotenv()
@@ -17,6 +18,7 @@ db.create_user_table()
 db.create_topic_table()
 db.create_letter_topic_table()
 db.create_user_topic_table()
+
 # Setup Flask and variables
 port = int(os.getenv('PORT', 8000))
 app = Flask(__name__)
@@ -50,7 +52,9 @@ def post_letter():
     # if there was no match, get a random one
     if recipient_id == None:
         recipient_id = db.get_random_recipient()
-    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], letter['viewed'], letter['sentiment'])
+    emotions = te.get_emotion(letter['content'])
+    sentiment = max(emotions, key=emotions.get)
+    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], letter['viewed'], sentiment)
     return letter_id
 
 @app.route('/letter/{letter_id}', methods=['GET'])

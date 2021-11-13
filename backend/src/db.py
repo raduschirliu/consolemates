@@ -111,6 +111,7 @@ def create_letter_topic_table():
         print(error)
 
 ## API for letter
+#def post_letter(author_id, recipient_id, reply_id, viewed, sentiment):
 
 ## API for topic
 
@@ -124,7 +125,7 @@ def get_recipient(topic_id):
     user_ids = cursor.fetchall()
     if user_ids.isEmpty():
         return None
-    return user_ids[0]
+    return random.choice(user_ids)
 
 def get_random_recipient():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
