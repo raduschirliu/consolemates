@@ -100,7 +100,7 @@ def post_user():
     if jwt == False:
         return "Unauthorized", 401
     # add a preferred topic to a user
-    topics = request.json
+    topics = request.json["topics"]
     user_id = jwt['sub']
     for topic_id in topics:
         db.post_user_topic(user_id, topic_id)
