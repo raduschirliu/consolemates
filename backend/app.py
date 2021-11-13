@@ -13,11 +13,7 @@ from src import util
 util.example()
 
 from src import db
-db.create_letter_table()
-db.create_user_table()
-db.create_topic_table()
-db.create_letter_topic_table()
-db.create_user_topic_table()
+db.create_tables()
 
 # Setup Flask and variables
 port = int(os.getenv('PORT', 8000))

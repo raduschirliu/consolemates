@@ -6,6 +6,14 @@ import uuid
 ## global variable of database url
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+## single database table creation function
+def create_tables():
+    create_letter_table()
+    create_user_table()
+    create_topic_table()
+    create_letter_topic_table()
+    create_user_topic_table()
+
 ## functions for creating database tables
 def create_user_table():
 
