@@ -175,13 +175,14 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
     """
 
     try:
-        cursor.execute(sql, (id, recipient_id, reply_id, sentiment, content))
+        cursor.execute(sql, (id, author_id, recipient_id, reply_id, viewed, sentiment, content))
         
         # commit the changes
         conn.commit()
         conn.close()
         return id
     except (Exception, psycopg2.DatabaseError) as error:
+        print("post_letter")
         print(error)
         return "Failed to post letter."
 
@@ -250,15 +251,13 @@ def get_topics():
 ## API for user
 def get_recipient(topic_id, user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor()
     # returns user id that has this topic_id in their preferred topics
     sql = "SELECT * FROM user_topic WHERE topic_id = %s AND user_id <> %s"
 
     try:
         cursor.execute(sql, (topic_id, user_id))
         user_ids = cursor.fetchall()
-        print(user_ids)
-        print(type(user_ids))
         conn.commit()
         conn.close()
         if not user_ids:
@@ -272,15 +271,13 @@ def get_recipient(topic_id, user_id):
 
 def get_random_recipient(user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor()
     # returns user id that has this topic_id in their preferred topics
     sql = "SELECT id FROM Users WHERE id <> %s"
 
     try:
         cursor.execute(sql, (user_id,))
         user_ids = cursor.fetchall()
-        print(user_ids)
-        print(type(user_ids))
         conn.commit()
         conn.close()
         if not user_ids:

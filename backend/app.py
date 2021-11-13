@@ -54,7 +54,7 @@ def post_letter():
     letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], False, sentiment, letter['content'])
     return letter_id
 
-@app.route('/letter/{letter_id}', methods=['GET'])
+@app.route('/letter/<letter_id>', methods=['GET'])
 @cross_origin()
 def get_letter(letter_id):
     # auth
@@ -75,7 +75,7 @@ def get_fresh_letters():
     user_id = jwt['sub']
     return jsonify(db.get_fresh_letters(user_id))
 
-@app.route('/letter/{letter_id}', methods=['PUT'])
+@app.route('/letter/<letter_id>', methods=['PUT'])
 @cross_origin()
 def put_letter_viewed(letter_id):
     return jsonify(db.put_letter_viewed(letter_id))
