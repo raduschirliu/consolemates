@@ -117,23 +117,23 @@ def create_letter_topic_table():
 ## API for topic
 
 ## API for user
-def get_recipient(topic_id):
+def get_recipient(topic_id, user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     # returns user id that has this topic_id in their preferred topics
-    sql = "SELECT * FROM UserTopic WHERE topic_id = %s"
-    cursor.execute(sql, (topic_id,))
+    sql = "SELECT * FROM UserTopic WHERE topic_id = %s AND user_id <> %s"
+    cursor.execute(sql, (topic_id, user_id))
     user_ids = cursor.fetchall()
     if user_ids.isEmpty():
         return None
     return random.choice(user_ids)
 
-def get_random_recipient():
+def get_random_recipient(user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
     # returns user id that has this topic_id in their preferred topics
-    sql = "SELECT id FROM Users"
-    cursor.execute(sql)
+    sql = "SELECT id FROM Users WHERE id <> %s"
+    cursor.execute(sql, (user_id,))
     user_ids = cursor.fetchall()
     return random.choice(user_ids)
 
