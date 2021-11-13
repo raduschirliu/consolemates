@@ -9,6 +9,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 MarkupSafe==1.1.1
 psycopg2==2.8.4
+PyJWT==2.3.0
 python-dotenv==0.15.0
 requests==2.26.0
 six==1.15.0
