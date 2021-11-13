@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests
 from src import auth
+import text2emotion as te
 
 # Load environment variables
 load_dotenv()
@@ -17,6 +18,7 @@ db.create_user_table()
 db.create_topic_table()
 db.create_letter_topic_table()
 db.create_user_topic_table()
+
 # Setup Flask and variables
 port = int(os.getenv('PORT', 8000))
 app = Flask(__name__)
@@ -41,16 +43,19 @@ def post_letter():
     # post a letter to the db
     letter = request.json
     topic_ids = letter['topics']
+    user_id = jwt['sub']   
     # try to find a match for any of the tagged topics
     for id in topic_ids:
-        recipient_id = db.get_recipient(id)
+        recipient_id = db.get_recipient(id, user_id)
         if recipient_id != None:
             # if we found a match, break out of the loop
             break
     # if there was no match, get a random one
     if recipient_id == None:
-        recipient_id = db.get_random_recipient()
-    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], letter['viewed'], letter['sentiment'])
+        recipient_id = db.get_random_recipient(user_id)
+    emotions = te.get_emotion(letter['content'])
+    sentiment = max(emotions, key=emotions.get)
+    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], letter['viewed'], sentiment, letter['content'])
     return letter_id
 
 @app.route('/letter/{letter_id}', methods=['GET'])
@@ -99,6 +104,17 @@ def post_user():
     for topic_id in topics:
         db.post_user_topic(user_id, topic_id)
     return user_id   
+
+@app.route('/user/topic', methods=['GET'])
+@cross_origin()
+def get_user_topics():
+    # auth
+    jwt = auth.verify_jwt()
+    if jwt == False:
+        return "Unauthorized", 401
+    # get all the preferred topics for a user
+    user_id = jwt['sub']   
+    return db.get_user_topics(user_id)
 
 # Main
 if __name__ == '__main__':
