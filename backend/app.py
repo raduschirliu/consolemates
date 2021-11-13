@@ -62,7 +62,7 @@ def get_letter(letter_id):
     if jwt == False:
         return "Unauthorized", 401
     # get a single letter
-    return db.get_letter(letter_id)
+    return jsonify(db.get_letter(letter_id))
 
 @app.route('/letter', methods=['GET'])
 @cross_origin()
@@ -73,12 +73,12 @@ def get_fresh_letters():
         return "Unauthorized", 401
     # get all fresh letters for a user
     user_id = jwt['sub']
-    return db.get_fresh_letters(user_id)
+    return jsonify(db.get_fresh_letters(user_id))
 
 @app.route('/letter/{letter_id}', methods=['PUT'])
 @cross_origin()
 def put_letter_viewed(letter_id):
-    return db.put_letter_viewed(letter_id)
+    return jsonify(db.put_letter_viewed(letter_id))
 
 # Topic
 @app.route('/topic', methods=['GET'])
@@ -89,7 +89,7 @@ def get_topics():
     if jwt == False:
         return "Unauthorized", 401
     # get all topics available
-    return db.get_topics()
+    return jsonify(db.get_topics())
 
 # User
 @app.route('/user', methods=['POST'])
@@ -115,7 +115,7 @@ def get_user_topics():
         return "Unauthorized", 401
     # get all the preferred topics for a user
     user_id = jwt['sub']   
-    return db.get_user_topics(user_id)
+    return jsonify(db.get_user_topics(user_id))
 
 # Main
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ import os
 import psycopg2
 import random
 import uuid
+from psycopg2.extras import RealDictCursor
 
 ## global variable of database url
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -18,7 +19,7 @@ def create_tables():
 def create_user_table():
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     sql = """
         CREATE TABLE IF NOT EXISTS users (
@@ -36,7 +37,7 @@ def create_user_table():
 def create_topic_table():
     
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     sql = """
         CREATE TABLE IF NOT EXISTS topic (
@@ -56,7 +57,7 @@ def create_topic_table():
 def create_letter_table():
     
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     sql = """
         CREATE TABLE IF NOT EXISTS letter (
@@ -79,7 +80,7 @@ def create_letter_table():
 
 def create_user_topic_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     sql = """
         CREATE TABLE IF NOT EXISTS user_topic (
@@ -99,7 +100,7 @@ def create_user_topic_table():
 def create_letter_topic_table():
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     sql = """
         CREATE TABLE IF NOT EXISTS letter_topic (
@@ -119,7 +120,7 @@ def create_letter_topic_table():
 ## API for letter
 def get_fresh_letters(user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     # returns all letters for which the recipient_id matches the user_id and viewed is false
     sql = "SELECT * FROM letter WHERE recipient_id = %s AND viewed = %s"
 
@@ -129,7 +130,7 @@ def get_fresh_letters(user_id):
         conn.commit()
         conn.close()
 
-        if letters.isEmpty():
+        if not letters:
             return None
         return letters
     
@@ -140,7 +141,7 @@ def get_fresh_letters(user_id):
 
 def get_letter(letter_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     # returns the letter with a id matching letter_id
     sql = "SELECT * FROM letter WHERE id = %s"
 
@@ -149,7 +150,7 @@ def get_letter(letter_id):
         letter = cursor.fetchone()
         conn.commit()
         conn.close()
-        if letter.isEmpty():
+        if not letter:
             return None
         return letter
         
@@ -159,7 +160,7 @@ def get_letter(letter_id):
 
 def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     id = str(uuid.uuid4())
     sql = """
     INSERT INTO letter (
@@ -186,7 +187,7 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
 
 def put_letter_viewed(letter_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     # sets the viewed column to true for the letter with a matching letter_id
     sql = "UPDATE letter SET viewed = true WHERE id = %s"
 
@@ -206,7 +207,7 @@ def put_letter_viewed(letter_id):
 def post_user_topic(user_id, topic_id):
     
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     # returns topic id that has this user_id in their preferred topics
     sql = "INSERT INTO user_topic (user_id, topic_id) VALUES (%s, %s)"
@@ -219,14 +220,14 @@ def post_user_topic(user_id, topic_id):
 def get_user_topics(user_id):
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     # returns topic id that has this user_id in their preferred topics
     sql = "SELECT * FROM user_topic WHERE user_id = %s"
     cursor.execute(sql, (user_id,))
     topic = cursor.fetchall()
     conn.close()
-    if topic.isEmpty():
+    if not topic:
         return None
     return topic
 
@@ -234,14 +235,14 @@ def get_user_topics(user_id):
 def get_topics():
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     # returns topic id that has this user_id in their preferred topics
     sql = "SELECT * FROM topic"
     cursor.execute(sql)
     topic = cursor.fetchall()
     conn.close()
-    if topic.isEmpty():
+    if not topic:
         return None
     return topic
 
@@ -249,36 +250,44 @@ def get_topics():
 ## API for user
 def get_recipient(topic_id, user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     # returns user id that has this topic_id in their preferred topics
     sql = "SELECT * FROM user_topic WHERE topic_id = %s AND user_id <> %s"
 
     try:
         cursor.execute(sql, (topic_id, user_id))
         user_ids = cursor.fetchall()
+        print(user_ids)
+        print(type(user_ids))
         conn.commit()
         conn.close()
-        if user_ids.isEmpty():
+        if not user_ids:
             return None
         return random.choice(user_ids)
     
     except (Exception, psycopg2.DatabaseError) as error:
+        print("get_recipient")
         print(error)
         return None
 
 def get_random_recipient(user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     # returns user id that has this topic_id in their preferred topics
     sql = "SELECT id FROM Users WHERE id <> %s"
 
     try:
         cursor.execute(sql, (user_id,))
         user_ids = cursor.fetchall()
+        print(user_ids)
+        print(type(user_ids))
         conn.commit()
         conn.close()
+        if not user_ids:
+            return None
         return random.choice(user_ids)
 
     except (Exception, psycopg2.DatabaseError) as error:
+        print("get_random_recipient")
         print(error)
         return None
