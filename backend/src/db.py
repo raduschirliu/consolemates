@@ -204,6 +204,17 @@ def put_letter_viewed(letter_id):
 
 ## API for topic
 
+# delete all topics for a user
+def clear_topics(user_id): 
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+    # returns topic id that has this user_id in their preferred topics
+    sql = "DELETE FROM user_topic WHERE user_id = %s"
+    cursor.execute(sql, (user_id,))
+    conn.commit()
+    conn.close()
+    return user_id
 # posts a user topic into the user_topic table
 def post_user_topic(user_id, topic_id):
     

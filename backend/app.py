@@ -102,6 +102,7 @@ def post_user():
     # add a preferred topic to a user
     topics = request.json["topics"]
     user_id = jwt['sub']
+    db.clear_topics(user_id)
     for topic_id in topics:
         db.post_user_topic(user_id, topic_id)
     return user_id   
