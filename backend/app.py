@@ -51,7 +51,7 @@ def post_letter():
         recipient_id = db.get_random_recipient(user_id)
     emotions = te.get_emotion(letter['content'])
     sentiment = max(emotions, key=emotions.get)
-    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], False, sentiment, letter['content'])
+    letter_id = db.post_letter(letter['author_id'], letter['subject'], recipient_id, letter['reply_id'], False, sentiment, letter['content'])
     return letter_id
 
 @app.route('/letter/<letter_id>', methods=['GET'])
