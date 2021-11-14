@@ -15,7 +15,7 @@ import ITopic from 'src/models/Topic';
 const TerminalPage = () => {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState<boolean>(false);
-  const { isAuthValid, getNewLetters, getAllTopics } =
+  const { isAuthValid, getNewLetters, getAllTopics, markLetterViewed } =
     useContext(LetterContext);
   const newLetters = useRef<ILetter[]>([]);
   const allTopics = useRef<ITopic[]>([]);
@@ -52,6 +52,10 @@ const TerminalPage = () => {
             allowTabs={false}
             commands={{
               ls: (args: string[], print: any, runCommand: any) => {
+                if (args.length < 2) {
+                  print("usage: list letters 'ls -l' or list topics 'ls -t'");
+                  return;
+                }
                 const arg = args[1];
                 if (arg === '-l') {
                   // if the letter flag is set
@@ -72,7 +76,6 @@ const TerminalPage = () => {
                   print('');
                 }
               },
-              stonks: () => 'stonks',
               touch: () => setEditorOpen(true),
               cat: (args: string[], print: any, runCommand: any) => {
                 if (args.length !== 2) {
@@ -104,6 +107,24 @@ const TerminalPage = () => {
                 print('Subject: ' + letter.subject);
                 print('-------');
                 print(letter.content);
+              },
+              rm: (args: string[], print: any, runCommand: any) => {
+                if (args.length < 2) {
+                  print("usage: remove letter 'rm [index]'");
+                  return;
+                }
+
+                const arg = args[1];
+                const index = parseInt(arg);
+                const letter_id_to_remove = newLetters.current[index];
+
+                markLetterViewed(letter_id_to_remove.id)
+                  .then((letter_id) => {
+                    newLetters.current = newLetters.current.filter(
+                      (letter) => letter_id !== letter.id
+                    );
+                  })
+                  .catch(alert);
               },
             }}
             actionHandlers={{
