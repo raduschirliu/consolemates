@@ -41,6 +41,7 @@ def post_letter():
     topic_ids = letter['topics']
     user_id = jwt['sub']   
     # try to find a match for any of the tagged topics
+    recipient_id = None
     for id in topic_ids:
         recipient_id = db.get_recipient(id, user_id)
         if recipient_id != None:
