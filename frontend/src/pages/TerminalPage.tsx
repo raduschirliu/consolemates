@@ -11,6 +11,7 @@ import LetterContext from 'src/contexts/LetterContext';
 import ILetter from 'src/models/Letter';
 import Terminal from 'terminal-in-react';
 import ITopic from 'src/models/Topic';
+import mugImage from 'src/assets/mug.png';
 
 interface IEditorState {
   open: boolean;
@@ -54,6 +55,7 @@ const TerminalPage = () => {
   return (
     <div className="flex-grow">
       <div
+        // style={{ backgroundImage: `url(${mugImage})` }}
         className={`terminal-container ${
           fullScreen ? 'absolute inset-0 w-full h-full' : ''
         }`}
@@ -67,16 +69,18 @@ const TerminalPage = () => {
             allowTabs={false}
             commands={{
               ls: (args: string[], print: any, runCommand: any) => {
-                if (args.length < 2) {
-                  print("usage: list letters 'ls -l' | list topics 'ls -t'");
+                if (args.length !== 2) {
+                  print("Usage: list letters 'ls -l' | list topics 'ls -t'");
                   return;
                 }
+
                 const arg = args[1];
                 if (arg === '-l') {
                   // if the letter flag is set
                   getNewLetters()
                     .then((result: ILetter[]) => {
                       newLetters.current = result;
+                      print('Received letters:');
                       result.map((letter, index) =>
                         print(create_letter_string(letter, index))
                       );
@@ -84,11 +88,13 @@ const TerminalPage = () => {
                     .catch(alert);
                 } else if (arg === '-t') {
                   // if the topic flag is set
+                  print('Topics:');
                   allTopics.current.map((topic, index) =>
                     print(create_topic_string(topic, index))
                   );
                 } else {
-                  print('');
+                  // Otherwise print help
+                  print("Usage: list letters 'ls -l' | list topics 'ls -t'");
                 }
               },
               stonks: () => 'stonks',
@@ -135,7 +141,9 @@ const TerminalPage = () => {
                   replyTo = newLetters.current[index];
 
                   if (replyTo.reply_id) {
-                    print('Cannot reply to a message that has already had a reply');
+                    print(
+                      'Cannot reply to a message that has already had a reply'
+                    );
                     return;
                   }
                 } else if (args.length > 2) {
@@ -178,11 +186,13 @@ const TerminalPage = () => {
                 if (letter.reply_id) {
                   // Get original letter if it exists
                   getLetter(letter.reply_id)
-                    .then((repliedTo: ILetter) => {})
-                    .catch(alert)
-                    .finally(() => {
+                    .then((repliedTo: ILetter) => {
+                      printLetter(repliedTo);
                       print('-------');
                       print('Reply:');
+                    })
+                    .catch(alert)
+                    .finally(() => {
                       printLetter(letter);
                     });
                 } else {
@@ -191,7 +201,7 @@ const TerminalPage = () => {
               },
               rm: (args: string[], print: any, runCommand: any) => {
                 if (args.length < 2) {
-                  print("usage: remove letter 'rm [index]'");
+                  print("Usage: Remove letter 'rm [index]'");
                   return;
                 }
 
