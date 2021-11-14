@@ -12,11 +12,24 @@ import ILetter from 'src/models/Letter';
 import Terminal from 'terminal-in-react';
 import ITopic from 'src/models/Topic';
 
+interface IEditorState {
+  open: boolean;
+  replyTo: ILetter | null;
+}
+
 const TerminalPage = () => {
-  const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const [editorState, setEditorState] = useState<IEditorState>({
+    open: false,
+    replyTo: null,
+  });
   const [fullScreen, setFullScreen] = useState<boolean>(false);
-  const { isAuthValid, getNewLetters, getAllTopics, markLetterViewed } =
-    useContext(LetterContext);
+  const {
+    isAuthValid,
+    getNewLetters,
+    getAllTopics,
+    getLetter,
+    markLetterViewed,
+  } = useContext(LetterContext);
   const newLetters = useRef<ILetter[]>([]);
   const allTopics = useRef<ITopic[]>([]);
 
@@ -76,7 +89,28 @@ const TerminalPage = () => {
                   print('');
                 }
               },
-              touch: () => setEditorOpen(true),
+              touch: (args: string[], print: any, runCommand: any) => {
+                let replyTo = null;
+
+                if (args.length === 2) {
+                  const index = parseInt(args[1]);
+
+                  if (isNaN(index) || index >= newLetters.current.length) {
+                    print('Please enter a valid ID');
+                    return;
+                  }
+
+                  replyTo = newLetters.current[index];
+                } else if (args.length > 2) {
+                  print('Usage: touch [reply ID]');
+                  return;
+                }
+
+                setEditorState({
+                  open: true,
+                  replyTo,
+                });
+              },
               cat: (args: string[], print: any, runCommand: any) => {
                 if (args.length !== 2) {
                   print('Usage: cat <ID>');
@@ -99,14 +133,24 @@ const TerminalPage = () => {
 
                 const letter = newLetters.current[index];
 
+                const printLetter = (l: ILetter) => {
+                  print('Subject: ' + l.subject);
+                  print(l.content);
+                };
+
                 if (letter.reply_id) {
                   // Get original letter if it exists
-                  // TODO: do this welp
+                  getLetter(letter.reply_id)
+                    .then((repliedTo: ILetter) => {})
+                    .catch(alert)
+                    .finally(() => {
+                      print('-------');
+                      print('Reply:');
+                      printLetter(letter);
+                    });
+                } else {
+                  printLetter(letter);
                 }
-
-                print('Subject: ' + letter.subject);
-                print('-------');
-                print(letter.content);
               },
               rm: (args: string[], print: any, runCommand: any) => {
                 if (args.length < 2) {
@@ -139,13 +183,16 @@ const TerminalPage = () => {
         )}
       </div>
       <Dialog
-        open={editorOpen}
-        onClose={() => setEditorOpen(false)}
+        open={editorState.open}
+        onClose={() => setEditorState({ open: false, replyTo: null })}
         maxWidth="md"
         fullWidth={true}
       >
         <DialogTitle>Letter Editor</DialogTitle>
-        <LetterEditor closeDialog={() => setEditorOpen(false)} />
+        <LetterEditor
+          replyTo={editorState.replyTo}
+          closeDialog={() => setEditorState({ open: false, replyTo: null })}
+        />
       </Dialog>
     </div>
   );
