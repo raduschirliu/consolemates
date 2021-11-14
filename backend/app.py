@@ -125,6 +125,18 @@ def get_user_topics():
     user_id = jwt['sub']   
     return jsonify(db.get_user_topics(user_id))
 
+# Stats
+@app.route('/stats', methods=['GET'])
+@cross_origin()
+def get_stats():
+    # auth
+    jwt = auth.verify_jwt()
+    if jwt == False:
+        return "Unauthorized", 401
+    # return sentiment stats for a user
+    user_id = jwt['sub'] 
+    return jsonify(db.get_stats(user_id))
+
 # Main
 if __name__ == '__main__':
     app.run(port=port, threaded=True)

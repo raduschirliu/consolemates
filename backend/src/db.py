@@ -311,3 +311,18 @@ def get_random_recipient(user_id):
         print("get_random_recipient")
         print(error)
         return None
+
+## API for stats
+def get_stats(user_id):
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cursor = conn.cursor()
+
+    # returns topic id that has this user_id in their preferred topics
+    sql = "SELECT sentiment FROM letter WHERE author_id = %s "
+    cursor.execute(sql, (user_id,))
+    sentiments = [r[0] for r in cursor.fetchall()]
+    print(sentiments)
+    conn.close()
+    if not sentiments:
+        return {}
+    return {i:sentiments.count(i) for i in set(sentiments)}
