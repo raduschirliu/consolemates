@@ -76,13 +76,26 @@ const TerminalPage = () => {
                 height: fullScreen ? '100%' : '75%',
               }}
               allowTabs={false}
+              // Nice, the types are wrong for this... it should be plural
+              // @ts-ignore
+              descriptions={{
+                ls: 'see a list of all topics or newly received letters',
+                logout: 'logout',
+                touch: 'create a new letter or reply to an existing one',
+                'set-topics': 'update the topics you will receive letters on',
+                cat: 'view the contents of a letter',
+                rm: 'remove a letter (permanently)',
+              }}
               commands={{
                 logout: () => {
                   logout();
                 },
                 ls: (args: string[], print: any, runCommand: any) => {
                   if (args.length !== 2) {
-                    print("Usage: list letters 'ls -l' | list topics 'ls -t'");
+                    print('touch: missing operand');
+                    print(
+                      "Usage: to list letters 'ls -l', or to list topics 'ls -t'"
+                    );
                     return;
                   }
 
@@ -106,7 +119,10 @@ const TerminalPage = () => {
                     );
                   } else {
                     // Otherwise print help
-                    print("Usage: list letters 'ls -l' | list topics 'ls -t'");
+                    print('touch: invalid operand');
+                    print(
+                      "Usage: to list letters 'ls -l', or to list topics 'ls -t'"
+                    );
                   }
                 },
                 'set-topics': (args: string[], print: any, runCommand: any) => {
@@ -125,7 +141,7 @@ const TerminalPage = () => {
                       index < 0 ||
                       index >= allTopics.current.length
                     ) {
-                      print('Invalid topic index: ' + index);
+                      print('set-topics: invalid topic ID');
                       return;
                     }
 
@@ -145,7 +161,7 @@ const TerminalPage = () => {
                     const index = parseInt(args[1]);
 
                     if (isNaN(index) || index >= newLetters.current.length) {
-                      print('Please enter a valid ID');
+                      print('touch: invalid ID');
                       return;
                     }
 
@@ -158,6 +174,7 @@ const TerminalPage = () => {
                       return;
                     }
                   } else if (args.length > 2) {
+                    print('touch: too many arguments');
                     print('Usage: touch [reply ID]');
                     return;
                   }
@@ -169,6 +186,7 @@ const TerminalPage = () => {
                 },
                 cat: (args: string[], print: any, runCommand: any) => {
                   if (args.length !== 2) {
+                    print('cat: invalid ID');
                     print('Usage: cat <ID>');
                     return;
                   }
@@ -183,7 +201,7 @@ const TerminalPage = () => {
                   const index = parseInt(args[1]);
 
                   if (isNaN(index) || index >= newLetters.current.length) {
-                    print('Please enter a valid ID');
+                    print('cat: invalid ID');
                     return;
                   }
 
@@ -212,6 +230,7 @@ const TerminalPage = () => {
                 },
                 rm: (args: string[], print: any, runCommand: any) => {
                   if (args.length < 2) {
+                    print('rm: not enough arguments');
                     print("Usage: Remove letter 'rm [index]'");
                     return;
                   }
@@ -219,8 +238,12 @@ const TerminalPage = () => {
                   const arg = args[1];
                   const index = parseInt(arg);
 
-                  if (isNaN(index) || index < 0 || index >= newLetters.current.length) {
-                    print('Please enter a valid ID');
+                  if (
+                    isNaN(index) ||
+                    index < 0 ||
+                    index >= newLetters.current.length
+                  ) {
+                    print('rm: invalid ID');
                     return;
                   }
 
