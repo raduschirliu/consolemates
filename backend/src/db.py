@@ -1,4 +1,5 @@
 import os
+from flask import app, g
 import psycopg2
 import random
 import uuid
@@ -6,6 +7,18 @@ from psycopg2.extras import RealDictCursor
 
 ## global variable of database url
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = psycopg2.connect(DATABASE_URL, sslmode='require')
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 ## single database table creation function
 def create_tables():
