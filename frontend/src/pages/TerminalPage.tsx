@@ -7,11 +7,14 @@ const TerminalPage = () => {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
 
   return (
-    <div>
+    <div className="flex-grow">
+      <h1 className="text-center text-blue-500">Hello</h1>
       <Terminal
         color="green"
         backgroundColor="black"
         barColor="black"
+        hideTopBar={true}
+        allowTabs={false}
         commands={{
           stonks: () => 'stonks',
           touch: () => setEditorOpen(true),
