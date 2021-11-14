@@ -135,7 +135,9 @@ def get_stats():
         return "Unauthorized", 401
     # return sentiment stats for a user
     user_id = jwt['sub'] 
-    return jsonify(db.get_stats(user_id))
+    result = db.get_stats(user_id)
+    result = dict((k.lower(), v) for k,v in result.items())
+    return jsonify(result)
 
 # Main
 if __name__ == '__main__':
