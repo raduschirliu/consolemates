@@ -1,15 +1,17 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { Snackbar } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import ILetter from '../models/Letter';
+import ILetter, { ILetterPost } from '../models/Letter';
 import ITopic from '../models/Topic';
 
 interface ILetterContext {
   children: any;
+  isAuthValid: () => boolean;
   getUserTopics: () => Promise<ITopic[]>;
   getAllTopics: () => Promise<ITopic[]>;
-  updateTopics: (userTopics: ITopic[]) => Promise<any>;
-  postLetter: (letter: ILetter) => Promise<any>;
+  updateUserTopics: (userTopics: ITopic[]) => Promise<any>;
+  postLetter: (letter: ILetterPost) => Promise<any>;
   getNewLetters: () => Promise<ILetter[]>;
   getLetter: (id: string) => Promise<ILetter>;
   showSnackbar: (msg: string, duration: number) => void;
@@ -19,19 +21,27 @@ interface ISnackbar {
   open: boolean;
   msg: string;
   duration: number;
-};
+}
 
 const API_URL = process.env['REACT_APP_API_URL'] || 'localhost:8000';
 const LetterContext = React.createContext<ILetterContext>(null as any);
 
 export const LetterProvider = ({ children }: { children: any }) => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const [snackbar, setSnackbar] = useState<ISnackbar>();
-  const [authToken, setAuthToken] = useState<string>('invalid');
+  const [snackbar, setSnackbar] = useState<ISnackbar>({
+    open: false,
+    msg: '',
+    duration: 0,
+  });
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const [topics, setTopics] = useState<ITopic[]>([]);
 
   const getHeaders = () => {
     return { headers: { Authorization: `Bearer ${authToken}` } };
+  };
+
+  const isAuthValid = () => {
+    return authToken !== null;
   };
 
   const getAllTopics = () => {
@@ -42,7 +52,6 @@ export const LetterProvider = ({ children }: { children: any }) => {
     return axios.get(`${API_URL}/topic`, getHeaders()).then((res: any) => {
       const allTopics = res.data as ITopic[];
       setTopics(allTopics);
-      console.log('got topics', allTopics);
       return allTopics;
     });
   };
@@ -53,11 +62,15 @@ export const LetterProvider = ({ children }: { children: any }) => {
       .then((res: any) => res.data as ITopic[]);
   };
 
-  const updateTopics = (userTopics: ITopic[]) => {
-    return axios.post(`${API_URL}/user`, userTopics, getHeaders());
+  const updateUserTopics = (userTopics: ITopic[]) => {
+    return axios.post(
+      `${API_URL}/user`,
+      { topics: userTopics.map((topic) => topic.id) },
+      getHeaders()
+    );
   };
 
-  const postLetter = (letter: ILetter) => {
+  const postLetter = (letter: ILetterPost) => {
     return axios.post(`${API_URL}/letter`, letter, getHeaders());
   };
 
@@ -77,7 +90,7 @@ export const LetterProvider = ({ children }: { children: any }) => {
     setSnackbar({
       open: true,
       msg,
-      duration
+      duration,
     });
   };
 
@@ -95,15 +108,22 @@ export const LetterProvider = ({ children }: { children: any }) => {
     <LetterContext.Provider
       value={{
         children,
+        isAuthValid,
         getAllTopics,
         getUserTopics,
-        updateTopics,
+        updateUserTopics,
         postLetter,
         getNewLetters,
         getLetter,
         showSnackbar,
       }}
     >
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={snackbar.duration}
+        onClose={() => setSnackbar({ open: false, msg: '', duration: 0 })}
+        message={snackbar.msg}
+      />
       {children}
     </LetterContext.Provider>
   );

@@ -1,30 +1,50 @@
-import { Chip } from '@mui/material';
+import { Chip, CircularProgress } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import LetterContext from '../../contexts/LetterContext';
 import ITopic from '../../models/Topic';
 
-const TopicSelector = () => {
-  const [selectedTopics, setSelectedTopics] = useState<ITopic[]>([]);
+const TopicSelector = ({
+  selectedTopics,
+  onTopicsChanged,
+}: {
+  selectedTopics: ITopic[];
+  onTopicsChanged: (topics: ITopic[]) => any;
+}) => {
   const [allTopics, setAllTopics] = useState<ITopic[]>([]);
-  const { getAllTopics } = useContext(LetterContext);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { isAuthValid, getAllTopics } = useContext(LetterContext);
+
+  const isSelected = (topic: ITopic) => {
+    return selectedTopics.some(t => t.id === topic.id);
+  };
 
   useEffect(() => {
-    getAllTopics().then(setAllTopics).catch(alert);
-  }, [getAllTopics]);
+    onTopicsChanged(selectedTopics);
+  }, [selectedTopics, onTopicsChanged]);
+
+  useEffect(() => {
+    if (!isAuthValid()) return;
+    getAllTopics()
+      .then(setAllTopics)
+      .catch(alert)
+      .finally(() => setLoading(false));
+  }, [getAllTopics, isAuthValid]);
 
   return (
     <div>
+      {loading ? <CircularProgress /> : null}
       {allTopics.map((topic: ITopic) => (
         <Chip
+          key={topic.id}
           label={topic.name}
-          variant={selectedTopics.includes(topic) ? 'filled' : 'outlined'}
+          variant={isSelected(topic) ? 'filled' : 'outlined'}
           onClick={() => {
-            if (selectedTopics.includes(topic)) {
+            if (isSelected(topic)) {
               // Deselect
-              setSelectedTopics((prev) => prev.filter((t) => t !== topic));
+              onTopicsChanged(selectedTopics.filter((t) => t !== topic));
             } else {
               // Select
-              setSelectedTopics((prev) => [...prev, topic]);
+              onTopicsChanged([...selectedTopics, topic]);
             }
           }}
         />

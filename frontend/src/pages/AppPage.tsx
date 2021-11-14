@@ -1,11 +1,12 @@
-import TopicSelector from '../components/TopicSelector/TopicSelector';
+import { Link } from 'react-router-dom';
+import LetterEditor from '../components/LetterEditor/LetterEditor';
 
 const AppPage = () => {
   return (
     <div className="flex flex-col">
-      <p>topics:</p>
-      <TopicSelector />
+      <Link to="/user">Update account</Link>
       <p>New letter:</p>
+      <LetterEditor />
     </div>
   );
 };

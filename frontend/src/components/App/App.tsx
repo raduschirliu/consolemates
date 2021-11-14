@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LetterProvider } from '../../contexts/LetterContext';
 import AppPage from '../../pages/AppPage';
 import HomePage from '../../pages/HomePage';
+import TerminalPage from '../../pages/TerminalPage';
+import UserPage from '../../pages/UserPage';
 import './App.css';
 
 const GuardedRoute = ({ component, ...rest }: any) => {
@@ -16,6 +18,8 @@ const App = () => {
         <Router>
           <Switch>
             <GuardedRoute path="/app" component={AppPage} />
+            <GuardedRoute path="/user" component={UserPage} />
+            <GuardedRoute path="/terminal" component={TerminalPage} />
             <Route path="/" component={HomePage} exact />
           </Switch>
         </Router>
