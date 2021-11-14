@@ -24,7 +24,7 @@ const HomePage = () => {
         className="home-monitor"
         style={{ backgroundImage: `url(${monitorImage})` }}
       >
-        <p className="text-md lg:text-lg xl:text-xl home-text">
+        <p className="text-md 2xl:text-lg home-text">
           Welcome to ConsoleMates!
           <br /> <br />
           This is a place where computer science students, software engineers,

@@ -54,10 +54,32 @@
 
 .home-text {
   width: 80%;
-  padding: 50px 0;
+  /* margin: 50px 0; */
   /* font-size: 20px; */
-  margin: 0 auto;
+  margin: 5vh auto;
   color: #00be68;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+/* Width */
+.home-monitor > ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.home-monitor > ::-webkit-scrollbar-track {
+  background: black;
+}
+
+/* Handle */
+.home-monitor > ::-webkit-scrollbar-thumb {
+  background: rgb(20, 20, 20);
+}
+
+/* Handle on hover */
+.home-monitor > ::-webkit-scrollbar-thumb:hover {
+  background: rgb(40, 40, 40);
 }
 
 .home-button {
