@@ -277,7 +277,7 @@ def get_recipient(topic_id, user_id):
 
     try:
         cursor.execute(sql, (topic_id, user_id))
-        user_ids = cursor.fetchall()
+        user_ids = [r[0] for r in cursor.fetchall()]
         conn.commit()
         conn.close()
         if not user_ids:
@@ -299,7 +299,7 @@ def get_random_recipient(user_id):
 
     try:
         cursor.execute(sql, (user_id,))
-        user_ids = cursor.fetchall()
+        user_ids = [r[0] for r in cursor.fetchall()]
         conn.commit()
         conn.close()
         if not user_ids:
