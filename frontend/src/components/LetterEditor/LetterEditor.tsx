@@ -1,15 +1,26 @@
 import Editor from '@monaco-editor/react';
-import { Button, TextField } from '@mui/material';
+import { Button, CircularProgress, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
+import ILetter from 'src/models/Letter';
 import ITopic from 'src/models/Topic';
 import LetterContext from '../../contexts/LetterContext';
 import TopicSelector from '../TopicSelector/TopicSelector';
 import './LetterEditor.css';
 
-const LetterEditor = ({ closeDialog }: { closeDialog: () => void }) => {
-  const [subject, setSubject] = useState<string>('');
+const LetterEditor = ({
+  replyTo,
+  closeDialog,
+}: {
+  replyTo: ILetter | null;
+  closeDialog: () => void;
+}) => {
+  const [subject, setSubject] = useState<string>(
+    replyTo ? `Re: ${replyTo.subject}` : ''
+  );
   const [content, setContent] = useState<string>('');
-  const [topics, setTopics] = useState<ITopic[]>([]);
+  const [topics, setTopics] = useState<ITopic[]>(
+    replyTo ? replyTo?.topics ?? [] : []
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const { postLetter, showSnackbar } = useContext(LetterContext);
 
@@ -18,9 +29,10 @@ const LetterEditor = ({ closeDialog }: { closeDialog: () => void }) => {
     setLoading(true);
 
     postLetter({
+      reply_id: replyTo?.id ?? undefined,
       subject,
       content,
-      topics: topics.map(t => t.id),
+      topics: topics.map((t) => t.id),
     })
       .catch(alert)
       .finally(() => {
@@ -46,7 +58,6 @@ const LetterEditor = ({ closeDialog }: { closeDialog: () => void }) => {
         <TopicSelector
           selectedTopics={topics}
           onTopicsChanged={(topics) => {
-            console.log(topics);
             setTopics(topics);
           }}
         />
@@ -67,7 +78,7 @@ const LetterEditor = ({ closeDialog }: { closeDialog: () => void }) => {
         variant="outlined"
         fullWidth={true}
       >
-        Send
+        {loading ? <CircularProgress /> : 'Send'}
       </Button>
     </div>
   );
