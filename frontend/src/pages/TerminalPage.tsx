@@ -68,7 +68,7 @@ const TerminalPage = () => {
             commands={{
               ls: (args: string[], print: any, runCommand: any) => {
                 if (args.length < 2) {
-                  print("usage: list letters 'ls -l' | list topics 'ls -t'");
+                  print("Usage: list letters 'ls -l' | list topics 'ls -t'");
                   return;
                 }
                 const arg = args[1];
@@ -91,7 +91,6 @@ const TerminalPage = () => {
                   print('');
                 }
               },
-              stonks: () => 'stonks',
               'set-topics': (args: string[], print: any, runCommand: any) => {
                 if (args.length === 1) {
                   print('Usage: set-topics <topic IDs...>');
@@ -186,7 +185,7 @@ const TerminalPage = () => {
               },
               rm: (args: string[], print: any, runCommand: any) => {
                 if (args.length < 2) {
-                  print("usage: remove letter 'rm [index]'");
+                  print("Usage: remove letter 'rm [index]'");
                   return;
                 }
 
