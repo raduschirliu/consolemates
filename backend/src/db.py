@@ -282,6 +282,7 @@ def get_recipient(topic_id, user_id):
         conn.close()
         if not user_ids:
             return None
+        print(user_ids)
         return random.choice(user_ids)
     
     except (Exception, psycopg2.DatabaseError) as error:
@@ -303,6 +304,7 @@ def get_random_recipient(user_id):
         conn.close()
         if not user_ids:
             return None
+        print(user_ids)
         return random.choice(user_ids)
 
     except (Exception, psycopg2.DatabaseError) as error:
