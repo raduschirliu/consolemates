@@ -133,6 +133,11 @@ const TerminalPage = () => {
                   }
 
                   replyTo = newLetters.current[index];
+
+                  if (replyTo.reply_id) {
+                    print('Cannot reply to a message that has already had a reply');
+                    return;
+                  }
                 } else if (args.length > 2) {
                   print('Usage: touch [reply ID]');
                   return;
