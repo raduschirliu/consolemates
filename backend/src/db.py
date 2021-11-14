@@ -67,7 +67,7 @@ def create_letter_table():
             author_id varchar(255) NOT NULL,
             subject varchar(255) NOT NULL,
             recipient_id varchar(255) NOT NULL,
-            reply_id varchar(255) NOT NULL,
+            reply_id varchar(255),
             viewed BOOLEAN NOT NULL,
             sentiment varchar(255) NOT NULL,
             content varchar(10485760) NOT NULL
