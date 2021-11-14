@@ -325,16 +325,16 @@ const TerminalPage = () => {
           )}
         </div>
       </div>
-      <div className="terminal-mug-container">
+      <div className="terminal-mug-container hidden lg:block">
         <img className="terminal-mug" src={mugImage} alt="Mug!!" />
         <div className="terminal-mug-steam-container">
-          {/* <div className="terminal-mug-steam terminal-mug-steam-1">~~~</div>
+          <div className="terminal-mug-steam terminal-mug-steam-1">~~~</div>
           <div className="terminal-mug-steam terminal-mug-steam-2">~~~</div>
-          <div className="terminal-mug-steam terminal-mug-steam-3">~~~</div> */}
+          <div className="terminal-mug-steam terminal-mug-steam-3">~~~</div>
         </div>
       </div>
       <div
-        className="terminal-note"
+        className="terminal-note hidden lg:block"
         style={{ backgroundImage: `url(${noteImage})` }}
       >
         <ul className="pl-5 pt-2 list-disc">
