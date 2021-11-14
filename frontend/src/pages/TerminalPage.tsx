@@ -66,7 +66,7 @@ const TerminalPage = () => {
             commands={{
               ls: (args: string[], print: any, runCommand: any) => {
                 if (args.length < 2) {
-                  print("usage: list letters 'ls -l' or list topics 'ls -t'");
+                  print("usage: list letters 'ls -l' | list topics 'ls -t'");
                   return;
                 }
                 const arg = args[1];
