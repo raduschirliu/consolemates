@@ -18,15 +18,23 @@ const TerminalPage = () => {
   const { isAuthValid, getNewLetters, getAllTopics } =
     useContext(LetterContext);
   const newLetters = useRef<ILetter[]>([]);
+  const allTopics = useRef<ITopic[]>([]);
 
   useEffect(() => {
     if (!isAuthValid()) return;
 
-    getNewLetters().then((l) => {
-      console.log('got new letters', l);
-      newLetters.current = l;
-    });
-  }, [isAuthValid, newLetters, getNewLetters]);
+    getAllTopics()
+      .then((topics: ITopic[]) => {
+        allTopics.current = topics;
+      })
+      .catch(alert);
+
+    getNewLetters()
+      .then((letters: ILetter[]) => {
+        newLetters.current = letters;
+      })
+      .catch(alert);
+  }, [isAuthValid, newLetters, getNewLetters, allTopics, getAllTopics]);
 
   return (
     <div className="flex-grow">
@@ -48,7 +56,8 @@ const TerminalPage = () => {
                 if (arg === '-l') {
                   // if the letter flag is set
                   getNewLetters()
-                    .then((result: any[]) => {
+                    .then((result: ILetter[]) => {
+                      newLetters.current = result;
                       result.map((letter, index) =>
                         print(create_letter_string(letter, index))
                       );
@@ -56,13 +65,9 @@ const TerminalPage = () => {
                     .catch(alert);
                 } else if (arg === '-t') {
                   // if the topic flag is set
-                  getAllTopics()
-                    .then((result: any[]) => {
-                      result.map((topic, index) =>
-                        print(create_topic_string(topic, index))
-                      );
-                    })
-                    .catch(alert);
+                  allTopics.current.map((topic, index) =>
+                    print(create_topic_string(topic, index))
+                  );
                 } else {
                   print('');
                 }
