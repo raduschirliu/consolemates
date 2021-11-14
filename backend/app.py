@@ -41,6 +41,7 @@ def post_letter():
     topic_ids = letter['topics']
     user_id = jwt['sub']   
     # try to find a match for any of the tagged topics
+    recipient_id = None
     for id in topic_ids:
         recipient_id = db.get_recipient(id, user_id)
         if recipient_id != None:
@@ -51,7 +52,10 @@ def post_letter():
         recipient_id = db.get_random_recipient(user_id)
     emotions = te.get_emotion(letter['content'])
     sentiment = max(emotions, key=emotions.get)
-    letter_id = db.post_letter(letter['author_id'], recipient_id, letter['reply_id'], False, sentiment, letter['content'])
+    reply_id = None
+    if 'reply_id' in letter:
+        reply_id = letter['reply_id']
+    letter_id = db.post_letter(user_id, letter['subject'], recipient_id, reply_id, False, sentiment, letter['content'])
     return letter_id
 
 @app.route('/letter/<letter_id>', methods=['GET'])

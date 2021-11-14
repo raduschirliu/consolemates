@@ -65,6 +65,7 @@ def create_letter_table():
         CREATE TABLE IF NOT EXISTS letter (
             id varchar(255) NOT NULL PRIMARY KEY,
             author_id varchar(255) NOT NULL,
+            subject varchar(255) NOT NULL,
             recipient_id varchar(255) NOT NULL,
             reply_id varchar(255)z,
             viewed BOOLEAN NOT NULL,
@@ -161,7 +162,7 @@ def get_letter(letter_id):
         print(error)
         return None
 
-def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
+def post_letter(author_id, subject, recipient_id, reply_id, viewed, sentiment, content):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     id = str(uuid.uuid4())
@@ -169,16 +170,17 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
     INSERT INTO letter (
         id,
         author_id,
+        subject,
         recipient_id,
         reply_id,
         viewed,
         sentiment,
         content
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
 
     try:
-        cursor.execute(sql, (id, author_id, recipient_id, reply_id, viewed, sentiment, content))
+        cursor.execute(sql, (id, author_id, subject, recipient_id, reply_id, viewed, sentiment, content))
         
         # commit the changes
         conn.commit()
@@ -242,12 +244,12 @@ def get_user_topics(user_id):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     # returns topic id that has this user_id in their preferred topics
-    sql = "SELECT t.name FROM user_topic ut, topic t WHERE t.id = ut.topic_id AND ut.user_id = %s "
+    sql = "SELECT t.name, t.id FROM user_topic ut, topic t WHERE t.id = ut.topic_id AND ut.user_id = %s "
     cursor.execute(sql, (user_id,))
     topic = cursor.fetchall()
     conn.close()
     if not topic:
-        return None
+        return []
     return topic
 
 
