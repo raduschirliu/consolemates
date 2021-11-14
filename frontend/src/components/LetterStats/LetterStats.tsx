@@ -8,7 +8,7 @@ const LetterStats = ({ stats }: { stats: IStats }) => {
   const data = [
     { title: 'Angry', value: stats.angry, color: '#2B0F66' },
     { title: 'Sad', value: stats.sad, color: '#00A1D5' },
-    { title: 'Happy', value: stats.sad, color: '#FF86C9' },
+    { title: 'Happy', value: stats.happy, color: '#FF86C9' },
     { title: 'Surprise', value: stats.surprise, color: '#F500BD' },
     { title: 'Fear', value: stats.fear, color: '#00BE68' },
   ];
