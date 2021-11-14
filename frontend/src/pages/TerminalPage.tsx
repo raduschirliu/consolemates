@@ -85,7 +85,8 @@ const TerminalPage = () => {
               msg="Type 'help' for a list of commands!"
               style={{
                 fontSize: fullScreen ? '1.75em' : '1.3em',
-                height: fullScreen ? '100%' : '75%',
+                height: fullScreen ? '100%' : '45vh',
+                // width: fullScreen ? '100%' : '35vw',
               }}
               allowTabs={false}
               // Nice, the types are wrong for this... it should be plural
@@ -264,6 +265,11 @@ const TerminalPage = () => {
 
                   const printLetter = (l: ILetter) => {
                     print('Subject: ' + l.subject);
+                    if (l?.topics?.length > 0) {
+                      print(
+                        'Topics: ' + l.topics.map((t) => t.name).join(', ')
+                      );
+                    }
                     print(l.content);
                   };
 

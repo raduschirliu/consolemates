@@ -1,4 +1,5 @@
-# Hackathon template
+# ConsoleMates
+Hackathon entry
 
 ## Frontend
 React + TypeScript
