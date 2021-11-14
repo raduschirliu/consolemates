@@ -235,7 +235,7 @@ def get_user_topics(user_id):
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     # returns topic id that has this user_id in their preferred topics
-    sql = "SELECT * FROM user_topic WHERE user_id = %s"
+    sql = "SELECT t.name FROM user_topic ut, topic t WHERE t.id = ut.topic_id AND ut.user_id = %s "
     cursor.execute(sql, (user_id,))
     topic = cursor.fetchall()
     conn.close()
