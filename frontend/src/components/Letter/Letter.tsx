@@ -5,9 +5,11 @@ import ILetter from '../../models/Letter';
 const Letter = ({
   letter,
   loadLetter,
+  markViewed,
 }: {
   letter: ILetter;
   loadLetter: (id: string) => any;
+  markViewed: (id: string) => any;
 }) => {
   return (
     <div>
@@ -15,14 +17,15 @@ const Letter = ({
       {letter.reply_id ? (
         <Button
           onClick={() => {
-            if (loadLetter && letter.reply_id) loadLetter(letter.reply_id);
+            if (letter.reply_id) loadLetter(letter.reply_id);
           }}
         ></Button>
       ) : null}
 
       {/* Letter content */}
       <p>Subject: {letter.subject}</p>
-      <ReactMarkdown>{letter.content}</ReactMarkdown>
+      <ReactMarkdown children={letter.content} />
+      <Button onClick={() => markViewed(letter.id)}>Done</Button>
     </div>
   );
 };

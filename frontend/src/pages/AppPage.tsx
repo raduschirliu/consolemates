@@ -8,7 +8,7 @@ import ILetter from '../models/Letter';
 
 const AppPage = () => {
   const [letters, setLetters] = useState<ILetter[]>([]);
-  const { getNewLetters } = useContext(LetterContext);
+  const { getNewLetters, markLetterViewed } = useContext(LetterContext);
 
   return (
     <div className="flex flex-col">
@@ -32,7 +32,15 @@ const AppPage = () => {
           key={l.id}
           letter={l}
           loadLetter={(id: string) => {
-            console.log(id);
+            console.log('load letter', id);
+          }}
+          markViewed={(id: string) => {
+            console.log('viewed', id);
+            markLetterViewed(id)
+              .catch(alert)
+              .finally(() => {
+                setLetters((prev) => prev.filter((l) => l.id !== id));
+              });
           }}
         />
       ))}

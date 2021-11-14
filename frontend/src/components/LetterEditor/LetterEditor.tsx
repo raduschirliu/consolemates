@@ -1,3 +1,4 @@
+import Editor from '@monaco-editor/react';
 import { Button, TextField } from '@mui/material';
 import { useContext, useState } from 'react';
 import LetterContext from '../../contexts/LetterContext';
@@ -33,14 +34,15 @@ const LetterEditor = () => {
         value={subject}
         multiline
       />
-      <TextField
+      {/* <TextField
         label="Description"
         variant="outlined"
         onChange={(e) => setContent(e.target.value)}
         disabled={loading}
         value={content}
         multiline
-      />
+      /> */}
+      <Editor height="500px" defaultLanguage="markdown" theme="vs-dark" />
       <Button
         disabled={loading || content === '' || subject === ''}
         onClick={() => submit()}

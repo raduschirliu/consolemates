@@ -14,6 +14,7 @@ interface ILetterContext {
   postLetter: (letter: ILetterPost) => Promise<any>;
   getNewLetters: () => Promise<ILetter[]>;
   getLetter: (id: string) => Promise<ILetter>;
+  markLetterViewed: (id: string) => Promise<any>;
   showSnackbar: (msg: string, duration: number) => void;
 }
 
@@ -86,6 +87,10 @@ export const LetterProvider = ({ children }: { children: any }) => {
       .then((res: any) => res.data as ILetter);
   };
 
+  const markLetterViewed = (id: string) => {
+    return axios.put(`${API_URL}/letter/${id}`, {}, getHeaders());
+  };
+
   const showSnackbar = (msg: string, duration: number) => {
     setSnackbar({
       open: true,
@@ -115,6 +120,7 @@ export const LetterProvider = ({ children }: { children: any }) => {
         postLetter,
         getNewLetters,
         getLetter,
+        markLetterViewed,
         showSnackbar,
       }}
     >
