@@ -97,7 +97,6 @@ const TerminalPage = () => {
                   print("Usage: list letters 'ls -l' | list topics 'ls -t'");
                 }
               },
-              stonks: () => 'stonks',
               'set-topics': (args: string[], print: any, runCommand: any) => {
                 if (args.length === 1) {
                   print('Usage: set-topics <topic IDs...>');
