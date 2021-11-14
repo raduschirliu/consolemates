@@ -23,8 +23,14 @@ const TerminalPage = () => {
     replyTo: null,
   });
   const [fullScreen, setFullScreen] = useState<boolean>(false);
-  const { isAuthValid, getNewLetters, getAllTopics, getLetter } =
-    useContext(LetterContext);
+  const {
+    isAuthValid,
+    getNewLetters,
+    getAllTopics,
+    getLetter,
+    updateUserTopics,
+    showSnackbar,
+  } = useContext(LetterContext);
   const newLetters = useRef<ILetter[]>([]);
   const allTopics = useRef<ITopic[]>([]);
 
@@ -81,6 +87,35 @@ const TerminalPage = () => {
                 }
               },
               stonks: () => 'stonks',
+              'set-topics': (args: string[], print: any, runCommand: any) => {
+                if (args.length === 1) {
+                  print('Usage: set-topics <topic IDs...>');
+                  return;
+                }
+
+                const topics = [];
+
+                for (let i = 1; i < args.length; i++) {
+                  const index = parseInt(args[i]);
+
+                  if (
+                    isNaN(index) ||
+                    index < 0 ||
+                    index >= allTopics.current.length
+                  ) {
+                    print('Invalid topic index: ' + index);
+                    return;
+                  }
+
+                  topics.push(allTopics.current[index]);
+                }
+
+                print('Set topics: ' + topics.map((t) => t.name).join(', '));
+
+                updateUserTopics(topics)
+                  .then(() => showSnackbar('Updated user topics!', 2500))
+                  .catch(alert);
+              },
               touch: (args: string[], print: any, runCommand: any) => {
                 let replyTo = null;
 
@@ -97,11 +132,11 @@ const TerminalPage = () => {
                   print('Usage: touch [reply ID]');
                   return;
                 }
-                
+
                 setEditorState({
                   open: true,
-                  replyTo
-                })
+                  replyTo,
+                });
               },
               cat: (args: string[], print: any, runCommand: any) => {
                 if (args.length !== 2) {
