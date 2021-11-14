@@ -1,4 +1,4 @@
-import { Modal } from '@mui/material';
+import { Box, Dialog, DialogTitle, Modal } from '@mui/material';
 import { useState } from 'react';
 import LetterEditor from 'src/components/LetterEditor/LetterEditor';
 import Terminal from 'terminal-in-react';
@@ -17,9 +17,15 @@ const TerminalPage = () => {
           touch: () => setEditorOpen(true),
         }}
       />
-      <Modal keepMounted open={editorOpen} onClose={() => setEditorOpen(false)}>
-        <LetterEditor />
-      </Modal>
+      <Dialog
+        open={editorOpen}
+        onClose={() => setEditorOpen(false)}
+        maxWidth="md"
+        fullWidth={true}
+      >
+        <DialogTitle>Letter Editor</DialogTitle>
+        <LetterEditor closeDialog={() => setEditorOpen(false)} />
+      </Dialog>
     </div>
   );
 };

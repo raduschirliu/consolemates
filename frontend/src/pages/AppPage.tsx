@@ -15,7 +15,7 @@ const AppPage = () => {
       <Link to="/user">Update account</Link>
       <br />
       <p>New letter:</p>
-      <LetterEditor />
+      {/* <LetterEditor /> */}
       <br />
       <p>Letters:</p>
       <Button
