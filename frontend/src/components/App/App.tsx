@@ -1,6 +1,7 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LetterProvider } from '../../contexts/LetterContext';
+import 'tailwindcss/tailwind.css';
 import AppPage from '../../pages/AppPage';
 import HomePage from '../../pages/HomePage';
 import TerminalPage from '../../pages/TerminalPage';
