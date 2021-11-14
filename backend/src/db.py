@@ -277,11 +277,12 @@ def get_recipient(topic_id, user_id):
 
     try:
         cursor.execute(sql, (topic_id, user_id))
-        user_ids = cursor.fetchall()
+        user_ids = [r[0] for r in cursor.fetchall()]
         conn.commit()
         conn.close()
         if not user_ids:
             return None
+        print(user_ids)
         return random.choice(user_ids)
     
     except (Exception, psycopg2.DatabaseError) as error:
@@ -298,11 +299,12 @@ def get_random_recipient(user_id):
 
     try:
         cursor.execute(sql, (user_id,))
-        user_ids = cursor.fetchall()
+        user_ids = [r[0] for r in cursor.fetchall()]
         conn.commit()
         conn.close()
         if not user_ids:
             return None
+        print(user_ids)
         return random.choice(user_ids)
 
     except (Exception, psycopg2.DatabaseError) as error:

@@ -77,7 +77,10 @@ def get_fresh_letters():
         return "Unauthorized", 401
     # get all fresh letters for a user
     user_id = jwt['sub']
-    return jsonify(db.get_fresh_letters(user_id))
+    result = db.get_fresh_letters(user_id)
+    if result == None:
+        result = []
+    return jsonify(result)
 
 @app.route('/letter/<letter_id>', methods=['PUT'])
 @cross_origin()
