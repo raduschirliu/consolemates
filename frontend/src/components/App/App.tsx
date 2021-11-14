@@ -10,6 +10,11 @@ import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const MuiTheme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "'Source Code Pro', monospace",
+    },
+  },
   palette: {
     primary: {
       main: '#00BE68',

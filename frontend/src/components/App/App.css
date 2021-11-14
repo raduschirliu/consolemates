@@ -1,3 +1,7 @@
+* > p {
+  font-family: 'Source Code Pro', monospace;
+}
+
 .app-container {
   width: 100vw;
   height: 100vh;
