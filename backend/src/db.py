@@ -247,7 +247,7 @@ def get_user_topics(user_id):
     topic = cursor.fetchall()
     conn.close()
     if not topic:
-        return None
+        return []
     return topic
 
 
