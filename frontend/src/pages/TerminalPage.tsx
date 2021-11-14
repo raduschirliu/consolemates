@@ -10,16 +10,27 @@ import monitorImage from 'src/assets/monitor.png';
 import noteImage from 'src/assets/note.png';
 import './TerminalPage.css';
 import { useAuth0 } from '@auth0/auth0-react';
+import IStats from 'src/models/Stats';
+import LetterStats from 'src/components/LetterStats/LetterStats';
 
 interface IEditorState {
   open: boolean;
   replyTo: ILetter | null;
 }
 
+interface IGraphState {
+  open: boolean;
+  stats: IStats;
+}
+
 const TerminalPage = () => {
   const [editorState, setEditorState] = useState<IEditorState>({
     open: false,
     replyTo: null,
+  });
+  const [graphState, setGraphState] = useState<IGraphState>({
+    open: false,
+    stats: { angry: 0, sad: 0, happy: 0, surprise: 0, fear: 0 },
   });
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const {
@@ -30,6 +41,7 @@ const TerminalPage = () => {
     updateUserTopics,
     showSnackbar,
     markLetterViewed,
+    getStats,
   } = useContext(LetterContext);
   const newLetters = useRef<ILetter[]>([]);
   const allTopics = useRef<ITopic[]>([]);
@@ -85,10 +97,53 @@ const TerminalPage = () => {
                 'set-topics': 'update the topics you will receive letters on',
                 cat: 'view the contents of a letter',
                 rm: 'remove a letter (permanently)',
+                stats:
+                  'see a breakdown of all the emotional sentiments shown in all the letters you have sent',
               }}
               commands={{
                 logout: () => {
                   logout();
+                },
+                stats: (args: string[], print: any, runCommand: any) => {
+                  if (args.length === 2) {
+                    if (args[1] !== 'graph') {
+                      print('stats: invalid argument');
+                    }
+
+                    getStats()
+                      .then((stats: IStats) => {
+                        setGraphState({
+                          open: true,
+                          stats,
+                        });
+                      })
+                      .catch(alert);
+
+                    return;
+                  }
+
+                  print(
+                    'Here is a breakdown the emotions expressed in your letters:'
+                  );
+
+                  getStats()
+                    .then((stats: IStats) => {
+                      const total =
+                        stats.angry +
+                        stats.happy +
+                        stats.sad +
+                        stats.surprise +
+                        stats.fear;
+                      print('Angry: ' + stats.angry + ' / ' + total);
+                      print('Happy: ' + stats.happy + ' / ' + total);
+                      print('Sad: ' + stats.sad + ' / ' + total);
+                      print('Surprise: ' + stats.surprise + ' / ' + total);
+                      print('Fear: ' + stats.fear + ' / ' + total);
+                      print(
+                        'If you wise to see these more visually in a graph, try the command `stats graph`'
+                      );
+                    })
+                    .catch(alert);
                 },
                 ls: (args: string[], print: any, runCommand: any) => {
                   if (args.length !== 2) {
@@ -282,8 +337,26 @@ const TerminalPage = () => {
         className="terminal-note"
         style={{ backgroundImage: `url(${noteImage})` }}
       >
-        <p>Some text hereeee</p>
+        <ul className="pl-5 pt-2 list-disc">
+          <li>Enter "help" for a list of commands.</li>
+          <br />
+          <li>Press the green button in the top left for fullscreen</li>
+        </ul>
       </div>
+      <Dialog
+        open={graphState.open}
+        onClose={() =>
+          setGraphState({
+            open: false,
+            stats: { angry: 0, sad: 0, happy: 0, surprise: 0, fear: 0 },
+          })
+        }
+        maxWidth="sm"
+        fullWidth={true}
+      >
+        <DialogTitle>Letter Stats</DialogTitle>
+        <LetterStats stats={graphState.stats} />
+      </Dialog>
       <Dialog
         open={editorState.open}
         onClose={() => setEditorState({ open: false, replyTo: null })}

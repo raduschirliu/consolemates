@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Snackbar } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import IStats from 'src/models/Stats';
 import ILetter, { ILetterPost } from '../models/Letter';
 import ITopic from '../models/Topic';
 
@@ -15,6 +16,7 @@ interface ILetterContext {
   getNewLetters: () => Promise<ILetter[]>;
   getLetter: (id: string) => Promise<ILetter>;
   markLetterViewed: (id: string) => Promise<any>;
+  getStats: () => Promise<IStats>;
   showSnackbar: (msg: string, duration: number) => void;
 }
 
@@ -91,6 +93,18 @@ export const LetterProvider = ({ children }: { children: any }) => {
     return axios.put(`${API_URL}/letter/${id}`, {}, getHeaders());
   };
 
+  const getStats = () => {
+    return axios.get(`${API_URL}/stats`, getHeaders()).then((res: any) => {
+      return {
+        happy: res?.data?.happy ?? 0,
+        fear: res?.data?.fear ?? 0,
+        sad: res?.data?.sad ?? 0,
+        surprise: res?.data?.surprise ?? 0,
+        angry: res?.data?.angry ?? 0,
+      } as IStats;
+    });
+  };
+
   const showSnackbar = (msg: string, duration: number) => {
     setSnackbar({
       open: true,
@@ -121,6 +135,7 @@ export const LetterProvider = ({ children }: { children: any }) => {
         getNewLetters,
         getLetter,
         markLetterViewed,
+        getStats,
         showSnackbar,
       }}
     >
