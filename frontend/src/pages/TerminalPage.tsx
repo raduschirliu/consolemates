@@ -1,37 +1,25 @@
-// import ReactTerminal from 'react-terminal-component';
-// import {
-//   CommandMapping,
-//   OutputFactory,
-//   EmulatorState,
-//   defaultCommandMapping,
-// } from 'javascript-terminal';
+import { Modal } from '@mui/material';
+import { useState } from 'react';
+import LetterEditor from 'src/components/LetterEditor/LetterEditor';
 import Terminal from 'terminal-in-react';
 
-// const emulatorState = EmulatorState.create({
-//   commandMapping: CommandMapping.create({
-//     test: {
-//       function: (state: any, opts: any) => {
-//         return {
-//           output: OutputFactory.makeTextOutput('asdf'),
-//         };
-//       },
-//       optDef: {},
-//     },
-//   }),
-// });
-
 const TerminalPage = () => {
+  const [editorOpen, setEditorOpen] = useState<boolean>(false);
+
   return (
     <div>
-      {/* <ReactTerminal emulatorState={emulatorState} /> */}
       <Terminal
         color="green"
         backgroundColor="black"
         barColor="black"
         commands={{
           stonks: () => 'stonks',
+          touch: () => setEditorOpen(true),
         }}
       />
+      <Modal keepMounted open={editorOpen} onClose={() => setEditorOpen(false)}>
+        <LetterEditor />
+      </Modal>
     </div>
   );
 };

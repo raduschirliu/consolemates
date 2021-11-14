@@ -34,15 +34,12 @@ const LetterEditor = () => {
         value={subject}
         multiline
       />
-      {/* <TextField
-        label="Description"
-        variant="outlined"
-        onChange={(e) => setContent(e.target.value)}
-        disabled={loading}
-        value={content}
-        multiline
-      /> */}
-      <Editor height="500px" defaultLanguage="markdown" theme="vs-dark" />
+      <Editor
+        height="500px"
+        defaultLanguage="markdown"
+        theme="vs-dark"
+        onChange={(value, event) => setContent('' + value)}
+      />
       <Button
         disabled={loading || content === '' || subject === ''}
         onClick={() => submit()}
