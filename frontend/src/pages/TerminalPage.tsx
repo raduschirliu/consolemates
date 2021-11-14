@@ -129,7 +129,11 @@ const TerminalPage = () => {
                   getStats()
                     .then((stats: IStats) => {
                       const total =
-                        stats.angry + stats.happy + stats.sad + stats.surprise + stats.fear;
+                        stats.angry +
+                        stats.happy +
+                        stats.sad +
+                        stats.surprise +
+                        stats.fear;
                       print('Angry: ' + stats.angry + ' / ' + total);
                       print('Happy: ' + stats.happy + ' / ' + total);
                       print('Sad: ' + stats.sad + ' / ' + total);
@@ -333,7 +337,11 @@ const TerminalPage = () => {
         className="terminal-note"
         style={{ backgroundImage: `url(${noteImage})` }}
       >
-        <p>Some text hereeee</p>
+        <ul className="pl-5 pt-2 list-disc">
+          <li>Enter "help" for a list of commands.</li>
+          <br />
+          <li>Press the green button in the top left for fullscreen</li>
+        </ul>
       </div>
       <Dialog
         open={graphState.open}
