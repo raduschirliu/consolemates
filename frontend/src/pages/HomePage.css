@@ -1,0 +1,36 @@
+.home-page {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to bottom,
+    #c4c4c4 0% 75%,
+    #011d32 75% 100%
+  );
+}
+
+.home-monitor-container {
+  position: absolute;
+  width: 100%;
+  height: 75%;
+  bottom: 8%;
+  left: 0;
+}
+
+.home-monitor {
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: auto;
+  max-width: 40vw;
+}
+
+.home-text {
+  max-width: 40vw;
+  padding: 80px;
+  font-size: 30px;
+  margin: auto;
+  color: #00BE68;
+}
