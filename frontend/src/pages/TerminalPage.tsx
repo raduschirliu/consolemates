@@ -85,7 +85,8 @@ const TerminalPage = () => {
               msg="Type 'help' for a list of commands!"
               style={{
                 fontSize: fullScreen ? '1.75em' : '1.3em',
-                height: fullScreen ? '100%' : '75%',
+                height: fullScreen ? '100%' : '45vh',
+                // width: fullScreen ? '100%' : '35vw',
               }}
               allowTabs={false}
               // Nice, the types are wrong for this... it should be plural
