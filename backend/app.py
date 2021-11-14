@@ -3,12 +3,12 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import requests
-from src import auth
 import text2emotion as te
 
 # Load environment variables
 load_dotenv()
 
+from src import auth
 from src import util
 util.example()
 
