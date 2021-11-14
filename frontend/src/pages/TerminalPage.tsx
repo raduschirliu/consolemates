@@ -338,7 +338,7 @@ const TerminalPage = () => {
         style={{ backgroundImage: `url(${noteImage})` }}
       >
         <ul className="pl-5 pt-2 list-disc">
-          <li>Enter "help" for a list of commands.</li>
+          <li>Enter "help" for a list of commands</li>
           <br />
           <li>Press the green button in the top left for fullscreen</li>
         </ul>

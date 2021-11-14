@@ -15,7 +15,7 @@ const HomePage = () => {
         className="home-monitor"
         style={{ backgroundImage: `url(${monitorImage})` }}
       >
-        <p className="home-text">
+        <p className="text-md lg:text-lg xl:text-xl home-text">
           Welcome to ConsoleMates!
           <br /> <br />
           This is a place where computer science students, software engineers,
@@ -25,6 +25,10 @@ const HomePage = () => {
           can truly feel free to speak (or type) your mind.
           <br /> <br />
           Get started below :)
+          <br />
+          <span className="text-xs">
+            (Currently, ConsoleMates only works on desktop devices.)
+          </span>
         </p>
 
         <Button
