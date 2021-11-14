@@ -1,10 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Dialog,
-  DialogTitle,
-  Modal,
-} from '@mui/material';
+import { CircularProgress, Dialog, DialogTitle } from '@mui/material';
 import { useContext, useEffect, useRef, useState } from 'react';
 import LetterEditor from 'src/components/LetterEditor/LetterEditor';
 import LetterContext from 'src/contexts/LetterContext';
@@ -12,6 +6,9 @@ import ILetter from 'src/models/Letter';
 import Terminal from 'terminal-in-react';
 import ITopic from 'src/models/Topic';
 import mugImage from 'src/assets/mug.png';
+import monitorImage from 'src/assets/monitor.png';
+import noteImage from 'src/assets/note.png';
+import './TerminalPage.css';
 
 interface IEditorState {
   open: boolean;
@@ -53,83 +50,131 @@ const TerminalPage = () => {
   }, [isAuthValid, newLetters, getNewLetters, allTopics, getAllTopics]);
 
   return (
-    <div className="flex-grow">
+    <div className="terminal-page">
       <div
-        // style={{ backgroundImage: `url(${mugImage})` }}
-        className={`terminal-container ${
-          fullScreen ? 'absolute inset-0 w-full h-full' : ''
+        className={`terminal-monitor ${
+          fullScreen ? 'terminal-container-fullscreen' : ''
         }`}
+        style={{ backgroundImage: `url(${monitorImage})` }}
       >
-        {isAuthValid() ? (
-          <Terminal
-            color="green"
-            backgroundColor="black"
-            barColor="black"
-            style={{ fontSize: fullScreen ? '1.75em' : '1.3em' }}
-            allowTabs={false}
-            commands={{
-              ls: (args: string[], print: any, runCommand: any) => {
-                if (args.length !== 2) {
-                  print("Usage: list letters 'ls -l' | list topics 'ls -t'");
-                  return;
-                }
-
-                const arg = args[1];
-                if (arg === '-l') {
-                  // if the letter flag is set
-                  getNewLetters()
-                    .then((result: ILetter[]) => {
-                      newLetters.current = result;
-                      print('Received letters:');
-                      result.map((letter, index) =>
-                        print(create_letter_string(letter, index))
-                      );
-                    })
-                    .catch(alert);
-                } else if (arg === '-t') {
-                  // if the topic flag is set
-                  print('Topics:');
-                  allTopics.current.map((topic, index) =>
-                    print(create_topic_string(topic, index))
-                  );
-                } else {
-                  // Otherwise print help
-                  print("Usage: list letters 'ls -l' | list topics 'ls -t'");
-                }
-              },
-              'set-topics': (args: string[], print: any, runCommand: any) => {
-                if (args.length === 1) {
-                  print('Usage: set-topics <topic IDs...>');
-                  return;
-                }
-
-                const topics = [];
-
-                for (let i = 1; i < args.length; i++) {
-                  const index = parseInt(args[i]);
-
-                  if (
-                    isNaN(index) ||
-                    index < 0 ||
-                    index >= allTopics.current.length
-                  ) {
-                    print('Invalid topic index: ' + index);
+        <div
+          // style={{ backgroundImage: `url(${mugImage})` }}
+          className={`terminal-container ${
+            fullScreen ? 'terminal-container-fullscreen' : ''
+          }`}
+        >
+          {isAuthValid() ? (
+            <Terminal
+              color="#00BE68"
+              backgroundColor="black"
+              barColor="black"
+              msg="Type 'help' for a list of commands!"
+              style={{
+                fontSize: fullScreen ? '1.75em' : '1.3em',
+                height: fullScreen ? '100%' : '75%',
+              }}
+              allowTabs={false}
+              commands={{
+                ls: (args: string[], print: any, runCommand: any) => {
+                  if (args.length !== 2) {
+                    print("Usage: list letters 'ls -l' | list topics 'ls -t'");
                     return;
                   }
 
-                  topics.push(allTopics.current[index]);
-                }
+                  const arg = args[1];
+                  if (arg === '-l') {
+                    // if the letter flag is set
+                    getNewLetters()
+                      .then((result: ILetter[]) => {
+                        newLetters.current = result;
+                        print('Received letters:');
+                        result.map((letter, index) =>
+                          print(create_letter_string(letter, index))
+                        );
+                      })
+                      .catch(alert);
+                  } else if (arg === '-t') {
+                    // if the topic flag is set
+                    print('Topics:');
+                    allTopics.current.map((topic, index) =>
+                      print(create_topic_string(topic, index))
+                    );
+                  } else {
+                    // Otherwise print help
+                    print("Usage: list letters 'ls -l' | list topics 'ls -t'");
+                  }
+                },
+                'set-topics': (args: string[], print: any, runCommand: any) => {
+                  if (args.length === 1) {
+                    print('Usage: set-topics <topic IDs...>');
+                    return;
+                  }
 
-                print('Set topics: ' + topics.map((t) => t.name).join(', '));
+                  const topics = [];
 
-                updateUserTopics(topics)
-                  .then(() => showSnackbar('Updated user topics!', 2500))
-                  .catch(alert);
-              },
-              touch: (args: string[], print: any, runCommand: any) => {
-                let replyTo = null;
+                  for (let i = 1; i < args.length; i++) {
+                    const index = parseInt(args[i]);
 
-                if (args.length === 2) {
+                    if (
+                      isNaN(index) ||
+                      index < 0 ||
+                      index >= allTopics.current.length
+                    ) {
+                      print('Invalid topic index: ' + index);
+                      return;
+                    }
+
+                    topics.push(allTopics.current[index]);
+                  }
+
+                  print('Set topics: ' + topics.map((t) => t.name).join(', '));
+
+                  updateUserTopics(topics)
+                    .then(() => showSnackbar('Updated user topics!', 2500))
+                    .catch(alert);
+                },
+                touch: (args: string[], print: any, runCommand: any) => {
+                  let replyTo = null;
+
+                  if (args.length === 2) {
+                    const index = parseInt(args[1]);
+
+                    if (isNaN(index) || index >= newLetters.current.length) {
+                      print('Please enter a valid ID');
+                      return;
+                    }
+
+                    replyTo = newLetters.current[index];
+
+                    if (replyTo.reply_id) {
+                      print(
+                        'Cannot reply to a message that has already had a reply'
+                      );
+                      return;
+                    }
+                  } else if (args.length > 2) {
+                    print('Usage: touch [reply ID]');
+                    return;
+                  }
+
+                  setEditorState({
+                    open: true,
+                    replyTo,
+                  });
+                },
+                cat: (args: string[], print: any, runCommand: any) => {
+                  if (args.length !== 2) {
+                    print('Usage: cat <ID>');
+                    return;
+                  }
+
+                  if (newLetters.current.length === 0) {
+                    print(
+                      'No new letters available. Use `ls` to update the list of letters, or wait to get some more!'
+                    );
+                    return;
+                  }
+
                   const index = parseInt(args[1]);
 
                   if (isNaN(index) || index >= newLetters.current.length) {
@@ -137,96 +182,79 @@ const TerminalPage = () => {
                     return;
                   }
 
-                  replyTo = newLetters.current[index];
+                  const letter = newLetters.current[index];
 
-                  if (replyTo.reply_id) {
-                    print(
-                      'Cannot reply to a message that has already had a reply'
-                    );
+                  const printLetter = (l: ILetter) => {
+                    print('Subject: ' + l.subject);
+                    print(l.content);
+                  };
+
+                  if (letter.reply_id) {
+                    // Get original letter if it exists
+                    getLetter(letter.reply_id)
+                      .then((repliedTo: ILetter) => {
+                        printLetter(repliedTo);
+                        print('-------');
+                        print('Reply:');
+                      })
+                      .catch(alert)
+                      .finally(() => {
+                        printLetter(letter);
+                      });
+                  } else {
+                    printLetter(letter);
+                  }
+                },
+                rm: (args: string[], print: any, runCommand: any) => {
+                  if (args.length < 2) {
+                    print("Usage: Remove letter 'rm [index]'");
                     return;
                   }
-                } else if (args.length > 2) {
-                  print('Usage: touch [reply ID]');
-                  return;
-                }
 
-                setEditorState({
-                  open: true,
-                  replyTo,
-                });
-              },
-              cat: (args: string[], print: any, runCommand: any) => {
-                if (args.length !== 2) {
-                  print('Usage: cat <ID>');
-                  return;
-                }
+                  const arg = args[1];
+                  const index = parseInt(arg);
 
-                if (newLetters.current.length === 0) {
-                  print(
-                    'No new letters available. Use `ls` to update the list of letters, or wait to get some more!'
-                  );
-                  return;
-                }
+                  if (isNaN(index) || index < 0 || index >= newLetters.current.length) {
+                    print('Please enter a valid ID');
+                    return;
+                  }
 
-                const index = parseInt(args[1]);
+                  const letter_id_to_remove = newLetters.current[index];
 
-                if (isNaN(index) || index >= newLetters.current.length) {
-                  print('Please enter a valid ID');
-                  return;
-                }
-
-                const letter = newLetters.current[index];
-
-                const printLetter = (l: ILetter) => {
-                  print('Subject: ' + l.subject);
-                  print(l.content);
-                };
-
-                if (letter.reply_id) {
-                  // Get original letter if it exists
-                  getLetter(letter.reply_id)
-                    .then((repliedTo: ILetter) => {
-                      printLetter(repliedTo);
-                      print('-------');
-                      print('Reply:');
+                  markLetterViewed(letter_id_to_remove.id)
+                    .then((letter_id) => {
+                      newLetters.current = newLetters.current.filter(
+                        (letter) => letter_id !== letter.id
+                      );
                     })
-                    .catch(alert)
-                    .finally(() => {
-                      printLetter(letter);
-                    });
-                } else {
-                  printLetter(letter);
-                }
-              },
-              rm: (args: string[], print: any, runCommand: any) => {
-                if (args.length < 2) {
-                  print("Usage: Remove letter 'rm [index]'");
-                  return;
-                }
-
-                const arg = args[1];
-                const index = parseInt(arg);
-                const letter_id_to_remove = newLetters.current[index];
-
-                markLetterViewed(letter_id_to_remove.id)
-                  .then((letter_id) => {
-                    newLetters.current = newLetters.current.filter(
-                      (letter) => letter_id !== letter.id
-                    );
-                  })
-                  .catch(alert);
-              },
-            }}
-            actionHandlers={{
-              handleMaximise: (toggleMaximize: () => void) => {
-                setFullScreen((prev) => !prev);
-                toggleMaximize();
-              },
-            }}
-          />
-        ) : (
-          <CircularProgress />
-        )}
+                    .catch(alert);
+                },
+              }}
+              actionHandlers={{
+                handleMaximise: (toggleMaximize: () => void) => {
+                  setFullScreen((prev) => !prev);
+                  toggleMaximize();
+                },
+              }}
+            />
+          ) : (
+            <CircularProgress />
+          )}
+        </div>
+      </div>
+      <div className="terminal-mug-container">
+        <img className="terminal-mug" src={mugImage} alt="Mug!!" />
+        <div className="terminal-mug-steam-container">
+          {/* <div className="terminal-mug-steam terminal-mug-steam-1">~~~</div>
+          <div className="terminal-mug-steam terminal-mug-steam-2">~~~</div>
+          <div className="terminal-mug-steam terminal-mug-steam-3">~~~</div> */}
+        </div>
+      </div>
+      <div
+        className="terminal-note"
+        style={{ backgroundImage: `url(${noteImage})` }}
+      >
+        <p>Some text hereeee</p>
       </div>
       <Dialog
         open={editorState.open}

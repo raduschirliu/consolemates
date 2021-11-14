@@ -1,0 +1,133 @@
+.terminal-page {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to bottom,
+    #c4c4c4 0% 75%,
+    #011d32 75% 100%
+  );
+}
+
+.terminal-monitor {
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 75%;
+  bottom: 8%;
+  left: 5%;
+}
+
+.terminal-container {
+  width: 100%;
+  position: relative;
+  left: 6%;
+  top: 5%;
+}
+
+/* Width */
+.terminal-container ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.terminal-container ::-webkit-scrollbar-track {
+  background: black;
+}
+
+/* Handle */
+.terminal-container ::-webkit-scrollbar-thumb {
+  background: rgb(20, 20, 20);
+}
+
+/* Handle on hover */
+.terminal-container ::-webkit-scrollbar-thumb:hover {
+  background: rgb(40, 40, 40);
+}
+
+.terminal-container-fullscreen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.terminal-note {
+  position: absolute;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 250px;
+  right: 6%;
+  bottom: 50%;
+  padding: 35px 10px 10px 10px;
+}
+
+.terminal-mug-container {
+  position: absolute;
+  width: 200px;
+  right: 10%;
+  bottom: 14%;
+}
+
+/* https://medium.com/@jessicakjang/code-with-me-animated-kawaii-cup-of-tea-3ce09fa31dd4 */
+
+.terminal-mug-steam-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.terminal-mug-steam {
+  font-size: 100px;
+  letter-spacing: -10px;
+  font-weight: 800;
+  color: white;
+  display: block;
+  position: absolute;
+  transform: rotate(90deg);
+  z-index: -1;
+}
+
+@keyframes steam {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0%;
+    top: 0px;
+  }
+}
+
+.terminal-mug-steam-1 {
+  top: 170px;
+  left: 90px;
+  animation: 4s ease-in infinite steam;
+}
+
+.terminal-mug-steam-2 {
+  top: 150px;
+  left: 140px;
+  animation: 3s ease-in 500ms infinite steam;
+}
+
+.terminal-mug-steam-3 {
+  top: 160px;
+  left: 190px;
+  animation: 4s ease-in 1s infinite steam;
+}
