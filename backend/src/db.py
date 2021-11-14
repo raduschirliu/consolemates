@@ -15,6 +15,7 @@ def create_tables():
     create_letter_topic_table()
     create_user_topic_table()
 
+
 ## functions for creating database tables
 def create_user_table():
 
@@ -33,6 +34,7 @@ def create_user_table():
         conn.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+
 
 def create_topic_table():
     
@@ -78,6 +80,7 @@ def create_letter_table():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
 
+
 def create_user_topic_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -97,8 +100,8 @@ def create_user_topic_table():
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
 
-def create_letter_topic_table():
 
+def create_letter_topic_table():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -186,6 +189,7 @@ def post_letter(author_id, recipient_id, reply_id, viewed, sentiment, content):
         print(error)
         return "Failed to post letter."
 
+
 def put_letter_viewed(letter_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -215,6 +219,8 @@ def clear_topics(user_id):
     conn.commit()
     conn.close()
     return user_id
+
+
 # posts a user topic into the user_topic table
 def post_user_topic(user_id, topic_id):
     
@@ -227,6 +233,7 @@ def post_user_topic(user_id, topic_id):
     conn.commit()
     conn.close()
     return topic_id
+
 
 # returns an array of topics for a user
 def get_user_topics(user_id):
@@ -243,9 +250,9 @@ def get_user_topics(user_id):
         return None
     return topic
 
+
 # returns an array of topics containing topic_id and name
 def get_topics():
-
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -279,6 +286,7 @@ def get_recipient(topic_id, user_id):
         print("get_recipient")
         print(error)
         return None
+
 
 def get_random_recipient(user_id):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
