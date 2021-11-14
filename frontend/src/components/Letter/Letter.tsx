@@ -21,6 +21,7 @@ const Letter = ({
       ) : null}
 
       {/* Letter content */}
+      <p>Subject: {letter.subject}</p>
       <ReactMarkdown>{letter.content}</ReactMarkdown>
     </div>
   );
