@@ -9,6 +9,7 @@ import mugImage from 'src/assets/mug.png';
 import monitorImage from 'src/assets/monitor.png';
 import noteImage from 'src/assets/note.png';
 import './TerminalPage.css';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface IEditorState {
   open: boolean;
@@ -32,6 +33,7 @@ const TerminalPage = () => {
   } = useContext(LetterContext);
   const newLetters = useRef<ILetter[]>([]);
   const allTopics = useRef<ITopic[]>([]);
+  const { logout } = useAuth0();
 
   useEffect(() => {
     if (!isAuthValid()) return;
@@ -75,6 +77,9 @@ const TerminalPage = () => {
               }}
               allowTabs={false}
               commands={{
+                logout: () => {
+                  logout();
+                },
                 ls: (args: string[], print: any, runCommand: any) => {
                   if (args.length !== 2) {
                     print("Usage: list letters 'ls -l' | list topics 'ls -t'");

@@ -1,5 +1,5 @@
 import Editor from '@monaco-editor/react';
-import { Button, CircularProgress, TextField } from '@mui/material';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
 import { useContext, useState } from 'react';
 import ILetter from 'src/models/Letter';
 import ITopic from 'src/models/Topic';
@@ -55,6 +55,9 @@ const LetterEditor = ({
         fullWidth={true}
       />
       <div className="editor-topics">
+        <Typography style={{ marginBottom: '4px' }} variant="body1">
+          Related topics
+        </Typography>
         <TopicSelector
           selectedTopics={topics}
           onTopicsChanged={(topics) => {
