@@ -265,6 +265,11 @@ const TerminalPage = () => {
 
                   const printLetter = (l: ILetter) => {
                     print('Subject: ' + l.subject);
+                    if (l?.topics?.length > 0) {
+                      print(
+                        'Topics: ' + l.topics.map((t) => t.name).join(', ')
+                      );
+                    }
                     print(l.content);
                   };
 
