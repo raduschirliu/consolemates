@@ -2,13 +2,22 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import monitorImage from 'src/assets/monitor.png';
 import logoImage from 'src/assets/logo.png';
+import Typing from 'react-typing-animation';
 import './HomePage.css';
 
 const HomePage = () => {
   return (
     <div className="home-page">
       <div className="home-title-container">
-        <p className="home-title">ConsoleMates</p>
+        <Typing loop={true} speed={100}>
+          <p className="home-title">
+            Con
+            <span className="pink-text">soleMates</span>
+          </p>
+          <Typing.Delay ms={2000} />
+          <Typing.Backspace count={12} />
+          <Typing.Delay ms={1000} />
+        </Typing>
         <img className="home-logo" src={logoImage} alt="logo" />
       </div>
       <div
