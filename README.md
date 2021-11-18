@@ -10,6 +10,8 @@ To maximize relatability between writer and reader, users can set topic preferen
 
 When a letter is sent to our backend, it is passed through the Python library text2emotion. This gives the letter an associated sentiment, which we track over time. By using the stats command, the user can view a pie chart of which emotions their letters have conveyed, serving as a tool to monitor their feelings over time.
 
+Our application is fully up and running, feel free to try it out [here](https://mmpp-htc2021.netlify.app/)!
+
 ## How we built it
 The backend is built with Python, Flask, and PostgreSQL. We created a REST API for our frontend to call and get any data we need to display to the user. All data is kept in a PostgreSQL database. To perform sentiment analysis, we used the Python library [Text2Emotion](https://shivamsharma26.github.io/text2emotion/).
 
@@ -25,19 +27,18 @@ A second challenge we faced was implementing the interactive console UI. We thou
 
 We are really proud of the product we created. The topic of mental health in the software developer community is close to our hearts and we are super glad we got to contribute our product to the cause. 
 
-One thing we’re particularly proud of is our creative UI. We loved the idea of a cute, calming UI to bring a relaxing atmosphere to the app, and we feel like we achieved that. We felt like the coding theme was greatly enhanced by our interactive console feature, and we feel like that tied everything together!
+One thing we’re particularly proud of is our creative UI. We loved the idea of a cute, calming UI to bring a relaxing atmosphere to the app, and we feel like we achieved that. We felt like the coding theme was greatly enhanced by our interactive console feature, and despite that being a major challenge to implement, we feel like that tied everything together!
 
-Another element we’re proud to submit is our backend. Since our last hackathon, we’ve improved a lot in our backend development. This time, we were much more familiar with setting up the database, and we were able to create a cleaner backend as a result.
+Another element we’re proud to submit is our backend. Since our last hackathon, we challenged ourselves to improve the quality of our backend development. This time, we used better coding practices when setting up the database, such as creating an ERD beforehand, and we were able to create a cleaner backend as a result.
 
 ## What we learned
 
-Broadly, we learned a ton about frontend and backend development. Specifically to our frontend, we went in-depth with how React and javascript worked with state saving. Another huge challenge we had to overcome was related to the implementation of a react terminal. This was a challenge for us because none of us had worked with this before. Working with front end is always a challenge so it was an amazing learning experience to work on a project that challenged us so actively. With regards to our backend, we learned a lot about how SQL queries work with database connections as well as initial database statements on how to initialize tables. Overall we feel like after this hackathon we have improved a ton in both frontend and backend development!
+Broadly, we learned a ton about frontend and backend development. Specifically to our frontend, we went in-depth with how React and JavaScript worked with state saving. Another huge challenge we had to overcome was related to the implementation of a React terminal. This was a challenge for us because none of us had worked with this before. Working on the front end is always a challenge, but it was an amazing learning experience to work on a project that challenged us so actively, especially when trying to bring our intricate design to life! With regards to our backend, we learned a lot about how SQL queries work with database connections as well as initial database statements on how to initialize tables. Overall we feel like after this hackathon we have improved a ton in both frontend and backend development!
 
 ## What's next for ConsoleMates
 
 We have some exciting ideas for ConsoleMates in the future! First, we would like to implement a gallery where you can save and revisit your favourite letters, refine the existing elements of our UI, and add support for mobile phones. Once this is done, we hope to add some finishing touches such as background music, an integrated VSCode editor for writing letters, and a sentiment-predicting ML algorithm that senses trends in letters. We are looking forward to seeing where this project takes us!
 
 ## Final Thoughts
-Thanks for reading about ConsoleMates! We hope you love it.  
 
-Side pot entry: Best User Experience
+Thanks for reading about ConsoleMates! We hope you love it.  
