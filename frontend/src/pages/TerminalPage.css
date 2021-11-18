@@ -21,13 +21,17 @@
   height: 75%;
   bottom: 8%;
   left: 5%;
+  max-width:75vh;
 }
 
 .terminal-container {
-  width: 100%;
+  /* width: 100%;
   position: relative;
   left: 6%;
-  top: 5%;
+  top: 5%; */
+  padding: 5vh 6.5vh;
+  overflow-y: hidden;
+  height: 50vh;
 }
 
 /* Width */
