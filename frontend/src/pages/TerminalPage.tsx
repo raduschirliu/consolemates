@@ -1,4 +1,11 @@
-import { CircularProgress, Dialog, DialogTitle } from '@mui/material';
+import {
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  Button,
+  DialogContent,
+  Link,
+} from '@mui/material';
 import { useContext, useEffect, useRef, useState } from 'react';
 import LetterEditor from 'src/components/LetterEditor/LetterEditor';
 import LetterContext from 'src/contexts/LetterContext';
@@ -33,6 +40,7 @@ const TerminalPage = () => {
     stats: { angry: 0, sad: 0, happy: 0, surprise: 0, fear: 0 },
   });
   const [fullScreen, setFullScreen] = useState<boolean>(false);
+  const [helpButtonOpen, setHelpButtonOpen] = useState<boolean>(false);
   const {
     isAuthValid,
     getNewLetters,
@@ -65,6 +73,49 @@ const TerminalPage = () => {
 
   return (
     <div className="terminal-page">
+      <div className="terminal-help-button">
+        <Button
+          onClick={() => {
+            setHelpButtonOpen(true);
+          }}
+          variant="outlined"
+          size="small"
+          color="secondary"
+        >
+          Resources
+        </Button>
+      </div>
+      <Dialog
+        open={helpButtonOpen}
+        onClose={() => {
+          setHelpButtonOpen(false);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DialogTitle>Additional Mental Health Support + Resources</DialogTitle>
+        <DialogContent>
+          Help is available. Find more information at the following links:
+          <ul className="pl-5 pt-2 list-disc">
+            <li>
+              <Link
+                href="https://www.ccmhs-ccsms.ca/mental-health-resources-1"
+                className="modal-link"
+              >
+                Canada
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://checkpointorg.com/global/"
+                className="modal-link"
+              >
+                Worldwide
+              </Link>
+            </li>
+          </ul>
+        </DialogContent>
+      </Dialog>
       <div
         className={`terminal-monitor ${
           fullScreen ? 'terminal-container-fullscreen' : ''
@@ -82,7 +133,7 @@ const TerminalPage = () => {
               color="#00BE68"
               backgroundColor="black"
               barColor="black"
-              msg="Type 'help' for a list of commands!"
+              msg="Type 'help' for a list of commands! For links to additional support, press the 'resources' button in the top left corner."
               style={{
                 fontSize: fullScreen ? '1.75em' : '1.3em',
                 height: fullScreen ? '100%' : '45vh',
@@ -343,10 +394,14 @@ const TerminalPage = () => {
         className="terminal-note hidden lg:block"
         style={{ backgroundImage: `url(${noteImage})` }}
       >
-        <ul className="pl-5 pt-2 list-disc">
+        <ul className="pl-5 pt-2 list-disc terminal-note-pad-text">
           <li>Enter "help" for a list of commands</li>
           <br />
           <li>Press the green button in the top left for fullscreen</li>
+          <br />
+          <li>
+            Press the 'resources' button in the top left for additional support
+          </li>
         </ul>
       </div>
       <Dialog

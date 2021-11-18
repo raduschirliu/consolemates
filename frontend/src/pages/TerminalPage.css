@@ -77,7 +77,7 @@
   bottom: 8%;
 }
 
-.terminal-mug  {
+.terminal-mug {
   /* z-index: 100; */
 }
 
@@ -139,4 +139,12 @@
   top: 160px;
   left: 190px;
   animation: 4s ease-in 1s infinite steam;
+}
+
+.terminal-note-pad-text {
+  font-size: 2vh;
+}
+
+.terminal-help-button {
+  padding: 10px;
 }
