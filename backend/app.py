@@ -10,7 +10,6 @@ load_dotenv()
 
 from src import auth
 from src import util
-util.example()
 
 from src import db
 db.create_tables()
