@@ -73,49 +73,6 @@ const TerminalPage = () => {
 
   return (
     <div className="terminal-page">
-      <div className="terminal-help-button">
-        <Button
-          onClick={() => {
-            setHelpButtonOpen(true);
-          }}
-          variant="outlined"
-          size="small"
-          color="secondary"
-        >
-          Resources
-        </Button>
-      </div>
-      <Dialog
-        open={helpButtonOpen}
-        onClose={() => {
-          setHelpButtonOpen(false);
-        }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <DialogTitle>Additional Mental Health Support + Resources</DialogTitle>
-        <DialogContent>
-          Help is available. Find more information at the following links:
-          <ul className="pl-5 pt-2 list-disc">
-            <li>
-              <Link
-                href="https://www.ccmhs-ccsms.ca/mental-health-resources-1"
-                className="modal-link"
-              >
-                Canada
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="https://checkpointorg.com/global/"
-                className="modal-link"
-              >
-                Worldwide
-              </Link>
-            </li>
-          </ul>
-        </DialogContent>
-      </Dialog>
       <div
         className={`terminal-monitor ${
           fullScreen ? 'terminal-container-fullscreen' : ''
@@ -133,7 +90,7 @@ const TerminalPage = () => {
               color="#00BE68"
               backgroundColor="black"
               barColor="black"
-              msg="Type 'help' for a list of commands! For links to additional support, press the 'resources' button in the top left corner."
+              msg="Type 'help' for a list of commands! For links to additional support, press the 'resources' button."
               style={{
                 fontSize: fullScreen ? '1.75em' : '1.3em',
                 height: fullScreen ? '100%' : '45vh',
@@ -394,15 +351,26 @@ const TerminalPage = () => {
         className="terminal-note hidden lg:block"
         style={{ backgroundImage: `url(${noteImage})` }}
       >
-        <ul className="pl-5 pt-2 list-disc terminal-note-pad-text">
+        <ul className="pl-5 pt-2 list-disc terminal-note-pad-text mb-2">
           <li>Enter "help" for a list of commands</li>
           <br />
           <li>Press the green button in the top left for fullscreen</li>
           <br />
           <li>
-            Press the 'resources' button in the top left for additional support
+            Press the 'resources' button below for additional support
           </li>
         </ul>
+        <Button
+          onClick={() => {
+            setHelpButtonOpen(true);
+          }}
+          variant="outlined"
+          size="small"
+          color="secondary"
+          fullWidth={true}
+        >
+          Resources
+        </Button>
       </div>
       <Dialog
         open={graphState.open}
@@ -429,6 +397,37 @@ const TerminalPage = () => {
           replyTo={editorState.replyTo}
           closeDialog={() => setEditorState({ open: false, replyTo: null })}
         />
+      </Dialog>
+      <Dialog
+        open={helpButtonOpen}
+        onClose={() => {
+          setHelpButtonOpen(false);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DialogTitle>Additional Mental Health Support + Resources</DialogTitle>
+        <DialogContent>
+          Help is available. Find more information at the following links:
+          <ul className="pl-5 pt-2 list-disc">
+            <li>
+              <Link
+                href="https://www.ccmhs-ccsms.ca/mental-health-resources-1"
+                className="modal-link"
+              >
+                Canada
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://checkpointorg.com/global/"
+                className="modal-link"
+              >
+                Worldwide
+              </Link>
+            </li>
+          </ul>
+        </DialogContent>
       </Dialog>
     </div>
   );
