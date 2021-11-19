@@ -9,9 +9,8 @@ import text2emotion as te
 load_dotenv()
 
 from src import auth
-from src import util
-
 from src import db
+
 db.create_tables()
 
 # Setup Flask and variables
