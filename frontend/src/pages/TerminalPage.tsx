@@ -111,7 +111,7 @@ const TerminalPage = () => {
               }}
               commands={{
                 logout: () => {
-                  logout();
+                  logout({ returnTo: window.location.origin });
                 },
                 stats: (args: string[], print: any, runCommand: any) => {
                   if (args.length === 2) {
@@ -348,7 +348,7 @@ const TerminalPage = () => {
         </div>
       </div>
       <div
-        className="terminal-note hidden lg:block"
+        className="terminal-note flex-col hidden"
         style={{ backgroundImage: `url(${noteImage})` }}
       >
         <ul className="pl-5 pt-2 list-disc terminal-note-pad-text mb-2">
@@ -356,9 +356,7 @@ const TerminalPage = () => {
           <br />
           <li>Press the green button in the top left for fullscreen</li>
           <br />
-          <li>
-            Press the 'resources' button below for additional support
-          </li>
+          <li>Press the 'resources' button below for additional support</li>
         </ul>
         <Button
           onClick={() => {

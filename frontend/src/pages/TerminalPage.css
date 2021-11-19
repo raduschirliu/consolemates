@@ -75,6 +75,12 @@
   padding: 35px 10px 10px 10px;
 }
 
+@media screen and (min-width: 1024px) {
+  .terminal-note {
+    display: flex;
+  }
+}
+
 .terminal-mug-container {
   position: absolute;
   width: 200px;
@@ -150,4 +156,5 @@
 .terminal-note-pad-text {
   font-size: 0.75em;
   margin-bottom: 10px;
+  flex: 1;
 }
